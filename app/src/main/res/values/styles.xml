@@ -1,10 +1,19 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <!--   app branding color for the app bar -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <!--   darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="homeAsUpIndicator">@drawable/ic_back_indicator</item>
+
+        <item name="colorButtonNormal">@color/charge_green_light_background</item>
+        <item name="colorControlNormal">@color/charge_green</item>
+        <item name="colorControlActivated">@color/primary_500</item>
     </style>
 
     <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
