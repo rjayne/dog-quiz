@@ -1,0 +1,120 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'org.jmailen.kotlinter'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+
+    defaultConfig {
+        applicationId "au.com.jayne.dogquiz"
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures{
+        dataBinding = true
+    }
+    packagingOptions {
+        exclude 'META-INF/metadata.kotlin_module'
+        exclude 'META-INF/metadata.jvm.kotlin_module'
+    }
+}
+
+kapt {
+//    correctErrorTypes = true // Uncomment this to find kapt errors
+    useBuildCache = true
+    javacOptions {
+        // Increase the max count of errors from annotation processors.
+        // Default is 100.
+        option("-Xmaxerrs", 5000)
+    }
+}
+
+dependencies {
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-metadata-jvm:$kotlinMetadataJvm"
+
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleExtensionsVersion"
+
+    implementation "androidx.recyclerview:recyclerview:$recyclerviewVersion"
+    kapt "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
+    implementation "androidx.core:core-ktx:$coreVersion"
+    implementation "androidx.fragment:fragment-ktx:$androidxFragmentVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleLivedataKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleLivedataKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleLivedataKtxVersion"
+
+    // preferences
+    implementation "androidx.preference:preference:$preferenceVersion"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
+    implementation "androidx.navigation:navigation-runtime-ktx:$navVersion"
+
+    // Material design
+    implementation "com.google.android.material:material:$materialDesignVersion"
+
+    // Dagger
+    implementation("com.google.dagger:dagger-android-support:$daggerVersion") {
+        exclude group: "com.android.support", module: "appcompat-v7"
+    }
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    // Moshi
+    implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+
+    // Logging
+    implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+
+    //  --- Network use ---
+    // Retrofit
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retroFitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retroFitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$retroFitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retroFitVersion"
+
+    testImplementation "junit:junit:$jUnitVersion"
+
+    androidTestImplementation "androidx.test.ext:junit:$testExtVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+
+}
+
+// Increase the number of errors that javac will print - use with Dagger
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xmaxerrs" << "500"
+    }
+}

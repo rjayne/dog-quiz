@@ -1,0 +1,88 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext.buildGradle = '4.0.1'
+    ext.kotlinVersion = '1.3.72'
+    ext.kotlinterVersion = '2.2.0'
+    ext.navVersion = '2.3.0'
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$buildGradle"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jmailen.gradle:kotlinter-gradle:$kotlinterVersion"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://kotlin.bintray.com/kotlinx/"
+        }
+    }
+    afterEvaluate {
+        tasks.withType(JavaCompile.class) {
+            options.compilerArgs << "-Xmaxerrs" << "500"
+        }
+    }
+}
+
+ext {
+    // sdk and tools
+    minSdkVersion = 24
+    targetSdkVersion = 29
+    compileSdkVersion = 29
+
+    // dependencies versions
+    kotlinCoroutinesVersion = '1.3.4'
+    kotlinMetadataJvm = '0.0.5'
+
+    lifecycleLivedataKtxVersion = '2.3.0-alpha05'
+
+    appCompatVersion = '1.1.0'
+    constraintLayoutVersion = '2.0.0-beta7'
+    recyclerviewVersion = '1.1.0'
+    archLifecycleVersion = '2.2.0'
+    lifecycleExtensionsVersion = '2.2.0'
+    coreVersion = '1.5.0-alpha01'
+    androidxFragmentVersion = '1.2.5'
+    ktxViewModelVersion = '2.2.0-rc02'
+    preferenceVersion = '1.1.1'
+
+    materialDesignVersion = '1.3.0-alpha01'
+
+    daggerVersion = '2.28.1'
+
+    timberVersion = '4.7.1'
+    moshiVersion = '1.9.3'
+
+    gsonVersion = '2.8.6'
+    retroFitVersion = '2.9.0'
+    okHttpVersion = '4.7.2'
+
+    jUnitVersion = '4.13'
+    testRunnerVersion = '1.2.0'
+    testRulesVersion = '1.2.0'
+    testArchCoreVersion = '2.1.0'
+    testCoreVersion = '1.2.0'
+    testExtVersion = '1.1.1'
+    mockitoKotlinVersion = '2.2.0'
+    mockitoVersion = '2.23.0'
+    powerMockVersion = '2.0.2'
+    robolectricVersion = '4.3.1'
+    espressoVersion = '3.2.0'
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
