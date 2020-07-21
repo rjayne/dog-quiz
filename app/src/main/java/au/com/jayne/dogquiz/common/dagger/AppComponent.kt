@@ -2,6 +2,7 @@ package au.com.jayne.dogquiz.common.dagger
 
 import au.com.jayne.dogquiz.DogQuizApplication
 import au.com.jayne.dogquiz.common.dagger.modules.AppModule
+import au.com.jayne.dogquiz.common.dagger.modules.StorageModule
 import au.com.jayne.dogquiz.common.dagger.modules.ViewModelFactoryModule
 import au.com.jayne.dogquiz.feature.main.dagger.MainActivityModule
 import dagger.BindsInstance
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 @Component(modules = [
     AndroidSupportInjectionModule::class,
     AppModule::class,
+    StorageModule::class,
     ViewModelFactoryModule::class,
     MainActivityModule::class
 ])

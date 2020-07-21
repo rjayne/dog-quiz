@@ -10,10 +10,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import au.com.jayne.dogquiz.R
 import au.com.jayne.dogquiz.common.dagger.preference.DaggerPreferenceFragmentCompat
+import au.com.jayne.dogquiz.common.extensions.getPositiveOkButtonDialog
 import au.com.jayne.dogquiz.common.preference.YesNoPreference
 import au.com.jayne.dogquiz.common.preference.YesNoPreferenceDialogFragment
+import au.com.jayne.dogquiz.common.util.SharedPreferenceStorage
 import au.com.jayne.dogquiz.domain.model.SharedPreferenceKey
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * This {@link Fragment} displays a hierarchy of {@link Preference} objects to the user. It's parent
@@ -21,6 +24,9 @@ import timber.log.Timber
  * located in settings_preferences.xml.
  */
 class SettingsFragment: DaggerPreferenceFragmentCompat() {
+
+    @Inject
+    lateinit var sharedPreferenceStorage: SharedPreferenceStorage
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,8 +49,8 @@ class SettingsFragment: DaggerPreferenceFragmentCompat() {
         resetScorePreference?.apply {
             onCompletionListener = object: YesNoPreference.OnCompletionListener{
                 override fun onYes() {
-                    Timber.d("onYes")
-//                    getPositiveOkButtonDialog(R.string.settings_reset_scores_complete_title, R.string.settings_reset_scores_complete_message)?.show()
+                    sharedPreferenceStorage.resetHighScores()
+                    getPositiveOkButtonDialog(R.string.settings_reset_scores_complete_title, R.string.settings_reset_scores_complete_message)?.show()
                 }
 
                 override fun onNo() {
