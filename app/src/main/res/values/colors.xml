@@ -4,6 +4,12 @@
     <color name="colorPrimaryDark">@color/dark_gray</color>
     <color name="colorAccent">@color/green</color>
 
+    <color name="primaryTextDarkX">@color/white</color>
+    <color name="secondaryTextDarkX">@color/light_gray</color>
+
+    <color name="primaryTextLightX">@android:color/black</color>
+    <color name="secondaryTextLightX">@color/light_gray</color>
+
     <color name="black_overlay">#66000000</color>
 
     <color name="gray_primary">#2A2A2A</color>

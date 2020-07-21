@@ -14,6 +14,9 @@
         <item name="colorButtonNormal">@color/charge_green_light_background</item>
         <item name="colorControlNormal">@color/charge_green</item>
         <item name="colorControlActivated">@color/primary_500</item>
+
+<!--        <item name="preferenceTheme">@style/PreferenceLightTheme</item>-->
+<!--        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>-->
     </style>
 
     <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
@@ -25,5 +28,29 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="PreferenceLightTheme" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="android:textColor">@color/primaryTextLightX</item>
+        <item name="android:textColorPrimary">@color/primaryTextLightX</item>
+        <item name="android:textColorSecondary">@color/secondaryTextLightX</item>
+    </style>
+
+    <style name="PreferenceDarkTheme" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="android:textColor">@color/primaryTextDarkX</item>
+        <item name="android:textColorPrimary">@color/primaryTextDarkX</item>
+        <item name="android:textColorSecondary">@color/secondaryTextDarkX</item>
+    </style>
+
+<!--    <style name="AppTheme.PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">-->
+<!--        <item name="android:colorAccent">@android:color/black</item>-->
+<!--    </style>-->
+
+<!--    <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay">-->
+<!--        <item name="switchPreferenceCompatStyle">@style/CategoryStyle</item>-->
+<!--    </style>-->
+
+<!--    <style name="switchPreference" parent="@style/Preference.SwitchPreferenceCompat.Material">-->
+
+<!--    </style>-->
 
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <au.com.jayne.dogquiz.common.preference.BlackSwitchPreferenceCompat
+        app:key="soundsEnabled"
+        app:title="@string/setting_sounds"
+        android:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="false"/>
+
+    <au.com.jayne.dogquiz.common.preference.YesNoPreference
+        app:key="highScores"
+        app:title="@string/setting_reset_scores"
+        android:dialogTitle="@string/setting_reset_scores_dialog_title"
+        android:dialogMessage="@string/setting_reset_scores_dialog_message"
+        android:positiveButtonText="@string/button_yes"
+        android:negativeButtonText="@string/button_no"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="true"/>
+
+</PreferenceScreen>

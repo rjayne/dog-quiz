@@ -72,7 +72,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleLivedataKtxVersion"
 
     // preferences
-    implementation "androidx.preference:preference:$preferenceVersion"
+//    implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"

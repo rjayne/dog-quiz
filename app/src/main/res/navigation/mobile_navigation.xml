@@ -22,4 +22,9 @@
         android:name="au.com.jayne.dogquiz.feature.notifications.NotificationsFragment"
         android:label="@string/title_help"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="au.com.jayne.dogquiz.feature.settings.SettingsFragment"
+        android:label="@string/title_settings" />
 </navigation>
