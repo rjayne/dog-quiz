@@ -22,11 +22,6 @@
     <color name="bg_grey">#181818</color>
     <color name="grey_disabled">#1c1c1c</color>
 
-<!--    <color name="button_over">#262625</color>-->
-<!--    <color name="button_normal">#212121</color>-->
-<!--    <color name="button_disabled">#1c1c1c</color>-->
-<!--    <color name="button_stroke">#181818</color>-->
-
     <color name="button_over">#737373</color>
     <color name="button_normal">@color/accent_500</color>
     <color name="button_disabled">@color/accent_300</color>
