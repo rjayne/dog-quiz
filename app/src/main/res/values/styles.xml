@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
+    <style name="AppTheme" parent="Theme.MaterialComponents">
         <!--   app branding color for the app bar -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <!--   darker variant for the status bar and contextual app bars -->
@@ -64,6 +64,39 @@
         <item name="android:paddingTop">15dp</item>
         <item name="android:paddingBottom">15dp</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="BottomCardViewStyle" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">15dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="QuizButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">120dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+
+        <item name="android:background">@drawable/no_stroke_button_with_ripple</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="QuizButtonLeft" parent="QuizButton"/>
+
+    <style name="QuizButtonRight" parent="QuizButton">
+        <item name="android:layout_marginEnd">5dp</item>
     </style>
 
 </resources>

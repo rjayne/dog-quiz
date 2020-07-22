@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import au.com.jayne.dogquiz.databinding.GameSelectionFragmentBinding
 import au.com.jayne.dogquiz.domain.model.Game
 import au.com.jayne.dogquiz.feature.main.MainViewModel
@@ -24,12 +25,8 @@ class GameSelectionFragment: DaggerFragment() {
     private val onGameSelectedListener = object: OnGameSelectedListener {
         override fun play(game: Game) {
             Timber.d("play $game")
-            viewModel.gameSelected = game
+            findNavController().navigate(GameSelectionFragmentDirections.startGame(game))
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(

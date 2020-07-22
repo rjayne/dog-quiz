@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import au.com.jayne.dogquiz.common.dagger.viewmodel.ViewModelKey
 import au.com.jayne.dogquiz.common.preference.YesNoPreferenceDialogFragment
 import au.com.jayne.dogquiz.feature.game.GameFragment
+import au.com.jayne.dogquiz.feature.game.GameViewModel
 import au.com.jayne.dogquiz.feature.main.MainActivity
 import au.com.jayne.dogquiz.feature.main.MainViewModel
 import au.com.jayne.dogquiz.feature.selection.GameSelectionFragment
@@ -23,7 +24,7 @@ abstract class MainActivityModule {
     abstract fun provideGameSelectionFragment(): GameSelectionFragment
 
     @ContributesAndroidInjector
-    abstract fun provideGamenFragment(): GameFragment
+    abstract fun provideGameFragment(): GameFragment
 
     @ContributesAndroidInjector
     abstract fun provideYesNoPreferenceDialogFragment(): YesNoPreferenceDialogFragment
@@ -35,4 +36,9 @@ abstract class MainActivityModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     internal abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GameViewModel::class)
+    internal abstract fun bindGameViewModel(gameViewModel: GameViewModel): ViewModel
 }

@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/gray_primary</color>
-    <color name="colorPrimaryDark">@color/dark_gray</color>
+    <color name="colorPrimary">@color/grey_primary</color>
+    <color name="colorPrimaryDark">@color/dark_grey</color>
     <color name="colorAccent">@color/green</color>
 
     <color name="primaryTextDarkX">@color/white</color>
-    <color name="secondaryTextDarkX">@color/light_gray</color>
+    <color name="secondaryTextDarkX">@color/light_grey</color>
 
     <color name="primaryTextLightX">@android:color/black</color>
-    <color name="secondaryTextLightX">@color/light_gray</color>
+    <color name="secondaryTextLightX">@color/light_grey</color>
 
     <color name="black_overlay">#66000000</color>
 
-    <color name="gray_primary">#2A2A2A</color>
-    <color name="light_gray">#b2b3b2</color>
-    <color name="medium_gray">#707170</color>
-    <color name="dark_gray">#262625</color>
-    <color name="darker_gray">#202119</color>
+    <color name="grey_primary">#2A2A2A</color>
+    <color name="light_grey">#b2b3b2</color>
+    <color name="medium_grey">#707170</color>
+    <color name="dark_grey">#262625</color>
+    <color name="darker_grey">#202119</color>
+    <color name="other_gray">#212121</color>
 
-    <color name="bg_gray">#181818</color>
+    <color name="bg_grey">#181818</color>
+    <color name="grey_disabled">#1c1c1c</color>
+
+<!--    <color name="button_over">#262625</color>-->
+<!--    <color name="button_normal">#212121</color>-->
+<!--    <color name="button_disabled">#1c1c1c</color>-->
+<!--    <color name="button_stroke">#181818</color>-->
+
+    <color name="button_over">#737373</color>
+    <color name="button_normal">@color/accent_500</color>
+    <color name="button_disabled">@color/accent_300</color>
+    <color name="button_stroke">#BABABA</color>
 
     <color name="green">#BCDE1E</color>
     <color name="charge_green">#ffcbdb29</color>
@@ -27,9 +39,9 @@
 
     <color name="highlight_red">#D7484E</color>
 
-    <color name="primary_500">#CDDC39</color>
     <color name="primary_200">#E6EE9C</color>
     <color name="primary_300">#DCE775</color>
+    <color name="primary_500">#CDDC39</color>
     <color name="primary_600">#C0CA33</color>
 
     <color name="accent_800">#424242</color>
@@ -40,5 +52,5 @@
     <color name="image_tint">#73000000</color>
 
     <!-- Toolbar Colors -->
-    <color name="toolbar_background">@color/dark_gray</color>
+    <color name="toolbar_background">@color/dark_grey</color>
 </resources>

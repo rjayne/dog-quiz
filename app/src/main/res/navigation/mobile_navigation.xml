@@ -3,13 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_game">
+    app:startDestination="@+id/navigation_game_selection">
 
     <fragment
-        android:id="@+id/navigation_game"
+        android:id="@+id/navigation_game_selection"
         android:name="au.com.jayne.dogquiz.feature.selection.GameSelectionFragment"
         android:label="@string/title_game"
-        tools:layout="@layout/game_selection_fragment" />
+        tools:layout="@layout/game_selection_fragment" >
+        <action
+            android:id="@+id/startGame"
+            app:destination="@id/game_fragment"
+            app:enterAnim="@anim/slide_from_bottom"
+            app:exitAnim="@anim/stay"
+            app:popEnterAnim="@anim/stay"
+            app:popExitAnim="@anim/slide_to_bottom"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_leaderboard"
@@ -27,4 +35,14 @@
         android:id="@+id/navigation_settings"
         android:name="au.com.jayne.dogquiz.feature.settings.SettingsFragment"
         android:label="@string/title_settings" />
+
+    <fragment
+        android:id="@+id/game_fragment"
+        android:name="au.com.jayne.dogquiz.feature.game.GameFragment"
+        android:label="@string/title_game"
+        tools:layout="@layout/game_fragment" >
+        <argument
+            android:name="game"
+            app:argType="au.com.jayne.dogquiz.domain.model.Game" />
+    </fragment>
 </navigation>

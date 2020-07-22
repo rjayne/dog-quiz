@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="button1Label" type="String"/>
+        <variable name="button2Label" type="String"/>
+        <variable name="button3Label" type="String"/>
+        <variable name="button4Label" type="String"/>
+        <variable name="onButton1ClickListener" type="android.view.View.OnClickListener"/>
+        <variable name="onButton2ClickListener" type="android.view.View.OnClickListener"/>
+        <variable name="onButton3ClickListener" type="android.view.View.OnClickListener"/>
+        <variable name="onButton4ClickListener" type="android.view.View.OnClickListener"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_grey">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/top_section"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/colorAccent"
+            tools:text="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/card"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/card"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:id="@+id/bone_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:src="@drawable/ic_bone_solid"
+                />
+            <ImageView
+                android:id="@+id/bone_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:src="@drawable/ic_bone_solid"
+                />
+            <ImageView
+                android:id="@+id/bone_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:src="@drawable/ic_bone_solid"
+                />
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            style="@style/BottomCardViewStyle"
+            app:cardPreventCornerOverlap="false"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/top_section"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_questions"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/dog_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="5dp"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_card_custom_corners"
+                    android:src="@drawable/ic_test_poodle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/button_1"
+                    />
+
+                <TextView
+                    android:id="@+id/button_1"
+                    style="@style/QuizButtonLeft"
+                    android:text="Button 1"
+                    app:onClickListener="@{onButton1ClickListener::onClick}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/button_2"
+                    app:layout_constraintBottom_toTopOf="@+id/button_3"/>
+
+<!--                <com.google.android.material.button.MaterialButton-->
+<!--                    android:id="@+id/button_1"-->
+<!--                    style="@style/QuizButton"-->
+<!--                    android:text="Button 1"-->
+<!--                    app:onClickListener="@{onButton1ClickListener::onClick}"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/button_2"-->
+<!--                    app:layout_constraintBottom_toTopOf="@+id/button_3"-->
+<!--                    />-->
+
+<!--                <com.google.android.material.button.MaterialButton-->
+<!--                    android:id="@+id/button_2"-->
+<!--                    style="@style/QuizButton"-->
+<!--                    android:text="Button 2"-->
+<!--                    app:onClickListener="@{onButton2ClickListener::onClick}"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/button_1"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintBottom_toTopOf="@+id/button_4"-->
+<!--                    />-->
+
+                <TextView
+                    android:id="@+id/button_2"
+                    style="@style/QuizButtonRight"
+                    android:layout_marginEnd="5dp"
+                    android:text="Button 2"
+                    app:onClickListener="@{onButton2ClickListener::onClick}"
+                    app:layout_constraintStart_toEndOf="@+id/button_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/button_4"/>
+
+<!--                <com.google.android.material.button.MaterialButton-->
+<!--                    android:id="@+id/button_3"-->
+<!--                    style="@style/QuizButton"-->
+<!--                    android:text="Button 3"-->
+<!--                    app:onClickListener="@{onButton3ClickListener::onClick}"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/button_4"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    />-->
+
+                <TextView
+                    android:id="@+id/button_3"
+                    style="@style/QuizButtonLeft"
+                    android:text="Button 3"
+                    app:onClickListener="@{onButton3ClickListener::onClick}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/button_4"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+<!--                <com.google.android.material.button.MaterialButton-->
+<!--                    android:id="@+id/button_4"-->
+<!--                    style="@style/QuizButton"-->
+<!--                    android:text="Button 4"-->
+<!--                    app:onClickListener="@{onButton4ClickListener::onClick}"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/button_3"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    />-->
+
+                <TextView
+                    android:id="@+id/button_4"
+                    style="@style/QuizButtonRight"
+                    android:text="Button 4"
+                    app:onClickListener="@{onButton4ClickListener::onClick}"
+                    app:layout_constraintStart_toEndOf="@+id/button_3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
