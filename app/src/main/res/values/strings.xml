@@ -10,10 +10,10 @@
     <string name="title_help">Help</string>
     <string name="title_settings">Settings</string>
 
-    <string name="selection_game_hound">Know Thy Hound</string>
-    <string name="selection_game_spaniel">Inspect a Spaniel</string>
-    <string name="selection_game_terrier">Terrier Test</string>
-    <string name="selection_game_doggy">Doggy Digest</string>
+    <string name="game_spaniel_name">Inspect a Spaniel</string>
+    <string name="game_hound_name">Know Thy Hound</string>
+    <string name="game_terrier_name">Terrier Test</string>
+    <string name="game_doggy_name">Doggy Digest</string>
 
     <string name="setting_category">Settings</string>
     <string name="setting_sounds">Sounds</string>

@@ -1,139 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".feature.selection.GameSelectionFragment">
-
-    <TextView
-        android:id="@+id/heading_text"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="au.com.jayne.dogquiz.domain.model.Game"/>
+        <variable name="onGameSelectedListener" type="au.com.jayne.dogquiz.feature.selection.GameSelectionFragment.OnGameSelectedListener"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:paddingTop="35dp"
-        android:paddingBottom="35dp"
-        android:text="Choose Your Game"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/charge_green"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        android:layout_height="match_parent"
+        android:background="@color/bg_gray"
+        tools:context=".feature.selection.GameSelectionFragment">
 
-    <ImageView
-        android:id="@+id/spaniel"
-        style="@style/GameImage"
-        android:src="@drawable/ic_game_spaniel"
-        app:layout_constraintTop_toBottomOf="@+id/heading_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/hound"
-        />
+        <ImageView
+            android:id="@+id/spaniel"
+            style="@style/GameImageLeft"
+            android:src="@drawable/ic_game_spaniel"
+            android:clickable="true"
+            android:onClick="@{() -> onGameSelectedListener.play(Game.SPANIEL_QUIZ)}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/terrier"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/hound"
+            />
 
-    <ImageView
-        android:id="@+id/hound"
-        style="@style/GameImageRight"
-        android:src="@drawable/ic_game_hound"
-        app:layout_constraintTop_toBottomOf="@+id/heading_text"
-        app:layout_constraintStart_toEndOf="@+id/spaniel"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        <ImageView
+            android:id="@+id/hound"
+            style="@style/GameImageRight"
+            android:src="@drawable/ic_game_hound"
+            android:clickable="true"
+            android:onClick="@{() -> onGameSelectedListener.play(Game.HOUND_QUIZ)}"
+            app:layout_constraintTop_toTopOf="@id/spaniel"
+            app:layout_constraintBottom_toBottomOf="@id/spaniel"
+            app:layout_constraintStart_toEndOf="@id/spaniel"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
-    <TextView
-        android:id="@+id/spaniel_text"
-        style="@style/GameText"
-        android:text="@string/selection_game_spaniel"
-        app:layout_constraintTop_toBottomOf="@+id/spaniel"
-        app:layout_constraintStart_toStartOf="@+id/spaniel"
-        app:layout_constraintEnd_toEndOf="@+id/spaniel"
-        />
+        <TextView
+            android:id="@+id/spaniel_text"
+            style="@style/GameText"
+            android:text="@string/game_spaniel_name"
+            android:clickable="true"
+            android:onClick="@{() -> onGameSelectedListener.play(Game.SPANIEL_QUIZ)}"
+            app:layout_constraintTop_toBottomOf="@id/spaniel"
+            app:layout_constraintStart_toStartOf="@id/spaniel"
+            app:layout_constraintEnd_toEndOf="@id/spaniel"
+            />
 
-    <TextView
-        android:id="@+id/hound_text"
-        style="@style/GameText"
-        android:text="@string/selection_game_hound"
-        app:layout_constraintTop_toBottomOf="@+id/hound"
-        app:layout_constraintStart_toStartOf="@+id/hound"
-        app:layout_constraintEnd_toEndOf="@+id/hound"
-        />
+        <TextView
+            android:id="@+id/hound_text"
+            style="@style/GameText"
+            android:text="@string/game_hound_name"
+            android:clickable="true"
+            android:onClick="@{() -> onGameSelectedListener.play(Game.HOUND_QUIZ)}"
+            app:layout_constraintTop_toTopOf="@id/spaniel_text"
+            app:layout_constraintBottom_toBottomOf="@id/spaniel_text"
+            app:layout_constraintStart_toStartOf="@id/hound"
+            app:layout_constraintEnd_toEndOf="@id/hound"
+            />
 
-    <ImageView
-        android:id="@+id/terrier"
-        style="@style/GameImage"
-        android:src="@drawable/ic_game_terrier"
-        app:layout_constraintTop_toBottomOf="@+id/spaniel_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/doggy"
-        />
+        <ImageView
+            android:id="@+id/terrier"
+            style="@style/GameImageLeft"
+            android:layout_marginBottom="60dp"
+            android:src="@drawable/ic_game_terrier"
+            android:clickable="true"
+            android:onClick="@{() -> onGameSelectedListener.play(Game.TERRIER_QUIZ)}"
+            app:layout_constraintTop_toBottomOf="@id/spaniel"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/doggy"
+            />
 
-    <ImageView
-        android:id="@+id/doggy"
-        style="@style/GameImageRight"
-        android:src="@drawable/ic_game_doggy"
-        app:layout_constraintTop_toBottomOf="@+id/hound_text"
-        app:layout_constraintStart_toEndOf="@+id/terrier"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        <ImageView
+            android:id="@+id/doggy"
+            style="@style/GameImageRight"
+            android:src="@drawable/ic_game_doggy"
+            android:clickable="true"
+            android:onClick="@{() -> onGameSelectedListener.play(Game.DOGGY_QUIZ)}"
+            app:layout_constraintTop_toTopOf="@id/terrier"
+            app:layout_constraintBottom_toBottomOf="@id/terrier"
+            app:layout_constraintStart_toEndOf="@id/terrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
-    <TextView
-        android:id="@+id/terrier_text"
-        style="@style/GameText"
-        android:text="@string/selection_game_terrier"
-        app:layout_constraintTop_toBottomOf="@+id/terrier"
-        app:layout_constraintStart_toStartOf="@+id/terrier"
-        app:layout_constraintEnd_toEndOf="@+id/terrier"
-        />
+        <TextView
+            android:id="@+id/terrier_text"
+            style="@style/GameText"
+            android:text="@string/game_terrier_name"
+            android:clickable="true"
+            android:onClick="@{() -> onGameSelectedListener.play(Game.TERRIER_QUIZ)}"
+            app:layout_constraintTop_toBottomOf="@id/terrier"
+            app:layout_constraintStart_toStartOf="@id/terrier"
+            app:layout_constraintEnd_toEndOf="@id/terrier"
+            />
 
-    <TextView
-        android:id="@+id/doggy_text"
-        style="@style/GameText"
-        android:text="@string/selection_game_doggy"
-        app:layout_constraintTop_toBottomOf="@+id/doggy"
-        app:layout_constraintStart_toStartOf="@+id/doggy"
-        app:layout_constraintEnd_toEndOf="@+id/doggy"
-        />
+        <TextView
+            android:id="@+id/doggy_text"
+            style="@style/GameText"
+            android:text="@string/game_doggy_name"
+            android:clickable="true"
+            android:onClick="@{() -> onGameSelectedListener.play(Game.DOGGY_QUIZ)}"
+            app:layout_constraintTop_toTopOf="@id/terrier_text"
+            app:layout_constraintBottom_toBottomOf="@id/terrier_text"
+            app:layout_constraintStart_toStartOf="@id/doggy"
+            app:layout_constraintEnd_toEndOf="@id/doggy"
+            />
 
-    <ImageView
-        android:id="@+id/hound_gradient"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/bg_bottom_to_top_gradient"
-        app:layout_constraintTop_toTopOf="@+id/spaniel"
-        app:layout_constraintBottom_toBottomOf="@+id/spaniel"
-        app:layout_constraintStart_toStartOf="@+id/spaniel"
-        app:layout_constraintEnd_toEndOf="@+id/spaniel"
-        />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintGuide_percent="0.95"
+            android:orientation="horizontal"
+            />
 
-    <ImageView
-        android:id="@+id/spaniel_gradient"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/bg_bottom_to_top_gradient"
-        app:layout_constraintTop_toTopOf="@+id/hound"
-        app:layout_constraintBottom_toBottomOf="@+id/hound"
-        app:layout_constraintStart_toStartOf="@+id/hound"
-        app:layout_constraintEnd_toEndOf="@+id/hound"
-        />
+        <ImageView
+            android:id="@+id/hound_gradient"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/bg_bottom_to_top_gradient"
+            app:layout_constraintTop_toTopOf="@id/spaniel"
+            app:layout_constraintBottom_toBottomOf="@id/spaniel"
+            app:layout_constraintStart_toStartOf="@id/spaniel"
+            app:layout_constraintEnd_toEndOf="@id/spaniel"
+            />
 
-    <ImageView
-        android:id="@+id/terrier_gradient"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/bg_bottom_to_top_gradient"
-        app:layout_constraintTop_toTopOf="@+id/terrier"
-        app:layout_constraintBottom_toBottomOf="@+id/terrier"
-        app:layout_constraintStart_toStartOf="@+id/terrier"
-        app:layout_constraintEnd_toEndOf="@+id/terrier"
-        />
+        <ImageView
+            android:id="@+id/spaniel_gradient"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/bg_bottom_to_top_gradient"
+            app:layout_constraintTop_toTopOf="@id/hound"
+            app:layout_constraintBottom_toBottomOf="@id/hound"
+            app:layout_constraintStart_toStartOf="@id/hound"
+            app:layout_constraintEnd_toEndOf="@id/hound"
+            />
 
-    <ImageView
-        android:id="@+id/doggy_gradient"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/bg_bottom_to_top_gradient"
-        app:layout_constraintTop_toTopOf="@+id/doggy"
-        app:layout_constraintBottom_toBottomOf="@+id/doggy"
-        app:layout_constraintStart_toStartOf="@+id/doggy"
-        app:layout_constraintEnd_toEndOf="@+id/doggy"
-        />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/terrier_gradient"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/bg_bottom_to_top_gradient"
+            app:layout_constraintTop_toTopOf="@id/terrier"
+            app:layout_constraintBottom_toBottomOf="@id/terrier"
+            app:layout_constraintStart_toStartOf="@id/terrier"
+            app:layout_constraintEnd_toEndOf="@id/terrier"
+            />
+
+        <ImageView
+            android:id="@+id/doggy_gradient"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/bg_bottom_to_top_gradient"
+            app:layout_constraintTop_toTopOf="@id/doggy"
+            app:layout_constraintBottom_toBottomOf="@id/doggy"
+            app:layout_constraintStart_toStartOf="@id/doggy"
+            app:layout_constraintEnd_toEndOf="@id/doggy"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

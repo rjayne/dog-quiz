@@ -18,6 +18,8 @@
     <color name="dark_gray">#262625</color>
     <color name="darker_gray">#202119</color>
 
+    <color name="bg_gray">#181818</color>
+
     <color name="green">#BCDE1E</color>
     <color name="charge_green">#ffcbdb29</color>
     <color name="charge_green_light_background">#b4c105</color>
