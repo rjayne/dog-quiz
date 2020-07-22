@@ -15,8 +15,6 @@
         <item name="colorControlNormal">@color/charge_green</item>
         <item name="colorControlActivated">@color/primary_500</item>
 
-<!--        <item name="preferenceTheme">@style/PreferenceLightTheme</item>-->
-<!--        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>-->
     </style>
 
     <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
@@ -41,16 +39,29 @@
         <item name="android:textColorSecondary">@color/secondaryTextDarkX</item>
     </style>
 
-<!--    <style name="AppTheme.PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">-->
-<!--        <item name="android:colorAccent">@android:color/black</item>-->
-<!--    </style>-->
+    <style name="GameImage">
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">15dp</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
 
-<!--    <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay">-->
-<!--        <item name="switchPreferenceCompatStyle">@style/CategoryStyle</item>-->
-<!--    </style>-->
+    <style name="GameImageRight">
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginEnd">15dp</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
 
-<!--    <style name="switchPreference" parent="@style/Preference.SwitchPreferenceCompat.Material">-->
-
-<!--    </style>-->
+    <style name="GameText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">15dp</item>
+    </style>
 
 </resources>

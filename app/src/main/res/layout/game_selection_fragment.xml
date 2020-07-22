@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".feature.selection.GameSelectionFragment">
+
+    <TextView
+        android:id="@+id/heading_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:paddingTop="35dp"
+        android:paddingBottom="35dp"
+        android:text="Choose Your Game"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/charge_green"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/spaniel"
+        style="@style/GameImage"
+        android:src="@drawable/ic_game_spaniel"
+        app:layout_constraintTop_toBottomOf="@+id/heading_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/hound"
+        />
+
+    <ImageView
+        android:id="@+id/hound"
+        style="@style/GameImageRight"
+        android:src="@drawable/ic_game_hound"
+        app:layout_constraintTop_toBottomOf="@+id/heading_text"
+        app:layout_constraintStart_toEndOf="@+id/spaniel"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/spaniel_text"
+        style="@style/GameText"
+        android:text="@string/selection_game_spaniel"
+        app:layout_constraintTop_toBottomOf="@+id/spaniel"
+        app:layout_constraintStart_toStartOf="@+id/spaniel"
+        app:layout_constraintEnd_toEndOf="@+id/spaniel"
+        />
+
+    <TextView
+        android:id="@+id/hound_text"
+        style="@style/GameText"
+        android:text="@string/selection_game_hound"
+        app:layout_constraintTop_toBottomOf="@+id/hound"
+        app:layout_constraintStart_toStartOf="@+id/hound"
+        app:layout_constraintEnd_toEndOf="@+id/hound"
+        />
+
+    <ImageView
+        android:id="@+id/terrier"
+        style="@style/GameImage"
+        android:src="@drawable/ic_game_terrier"
+        app:layout_constraintTop_toBottomOf="@+id/spaniel_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/doggy"
+        />
+
+    <ImageView
+        android:id="@+id/doggy"
+        style="@style/GameImageRight"
+        android:src="@drawable/ic_game_doggy"
+        app:layout_constraintTop_toBottomOf="@+id/hound_text"
+        app:layout_constraintStart_toEndOf="@+id/terrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/terrier_text"
+        style="@style/GameText"
+        android:text="@string/selection_game_terrier"
+        app:layout_constraintTop_toBottomOf="@+id/terrier"
+        app:layout_constraintStart_toStartOf="@+id/terrier"
+        app:layout_constraintEnd_toEndOf="@+id/terrier"
+        />
+
+    <TextView
+        android:id="@+id/doggy_text"
+        style="@style/GameText"
+        android:text="@string/selection_game_doggy"
+        app:layout_constraintTop_toBottomOf="@+id/doggy"
+        app:layout_constraintStart_toStartOf="@+id/doggy"
+        app:layout_constraintEnd_toEndOf="@+id/doggy"
+        />
+
+    <ImageView
+        android:id="@+id/hound_gradient"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/bg_bottom_to_top_gradient"
+        app:layout_constraintTop_toTopOf="@+id/spaniel"
+        app:layout_constraintBottom_toBottomOf="@+id/spaniel"
+        app:layout_constraintStart_toStartOf="@+id/spaniel"
+        app:layout_constraintEnd_toEndOf="@+id/spaniel"
+        />
+
+    <ImageView
+        android:id="@+id/spaniel_gradient"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/bg_bottom_to_top_gradient"
+        app:layout_constraintTop_toTopOf="@+id/hound"
+        app:layout_constraintBottom_toBottomOf="@+id/hound"
+        app:layout_constraintStart_toStartOf="@+id/hound"
+        app:layout_constraintEnd_toEndOf="@+id/hound"
+        />
+
+    <ImageView
+        android:id="@+id/terrier_gradient"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/bg_bottom_to_top_gradient"
+        app:layout_constraintTop_toTopOf="@+id/terrier"
+        app:layout_constraintBottom_toBottomOf="@+id/terrier"
+        app:layout_constraintStart_toStartOf="@+id/terrier"
+        app:layout_constraintEnd_toEndOf="@+id/terrier"
+        />
+
+    <ImageView
+        android:id="@+id/doggy_gradient"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/bg_bottom_to_top_gradient"
+        app:layout_constraintTop_toTopOf="@+id/doggy"
+        app:layout_constraintBottom_toBottomOf="@+id/doggy"
+        app:layout_constraintStart_toStartOf="@+id/doggy"
+        app:layout_constraintEnd_toEndOf="@+id/doggy"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
