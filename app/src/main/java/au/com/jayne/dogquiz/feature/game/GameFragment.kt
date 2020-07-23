@@ -1,5 +1,7 @@
 package au.com.jayne.dogquiz.feature.game
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +16,13 @@ import au.com.jayne.dogquiz.common.ui.DialogFragmentCreator
 import au.com.jayne.dogquiz.databinding.GameFragmentBinding
 import au.com.jayne.dogquiz.domain.model.Event
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
+
 
 class GameFragment: DaggerFragment() {
 
@@ -53,6 +59,10 @@ class GameFragment: DaggerFragment() {
     ): View? {
         binding = GameFragmentBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@GameFragment)
+            if(viewModel?.dogChallenge?.value == null) {
+                contentLoadingProgressBar.setVisibility(View.VISIBLE)
+            }
+
             viewModel = this@GameFragment.viewModel
 
             viewModel?.score?.observe(viewLifecycleOwner, Observer<Int> { userScore ->
@@ -64,10 +74,25 @@ class GameFragment: DaggerFragment() {
             })
 
             viewModel?.dogChallenge?.observe(viewLifecycleOwner, Observer { dogChallenge ->
+
+
                 Glide.with(this@GameFragment)
                     .load(dogChallenge.imageUrl)
                     .centerCrop()
-                    .into(dogImage)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(object : CustomTarget<Drawable>() {
+                        override fun onResourceReady(
+                            resource: Drawable,
+                            transition: Transition<in Drawable>?
+                        ) {
+                            resource?.let{
+                                dogImage.setImageDrawable(resource)
+                                binding.contentLoadingProgressBar.setVisibility(View.INVISIBLE)
+                            }
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {}
+                    })
             })
 
             viewModel?.imagesToPreload?.observe(viewLifecycleOwner, Observer { imagesToPreload ->
