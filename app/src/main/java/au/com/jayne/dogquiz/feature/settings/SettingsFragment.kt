@@ -35,7 +35,7 @@ class SettingsFragment: DaggerPreferenceFragmentCompat() {
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState) //as LinearLayout?
         view?.apply {
-            setBackgroundColor(resources.getColor(android.R.color.white, null))
+            setBackground(resources.getDrawable(R.drawable.bg_poodle, null))
             setPaddingRelative(0, resources.getDimensionPixelSize(R.dimen.settings_top_margin).toInt(), 0, 0)
         }
 

@@ -6,13 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import au.com.jayne.dogquiz.R
+import au.com.jayne.dogquiz.common.extensions.displayDialog
+import au.com.jayne.dogquiz.common.network.ConnectionStateMonitor
+import au.com.jayne.dogquiz.common.ui.DialogFragmentCreator
 import au.com.jayne.dogquiz.databinding.GameFragmentBinding
+import au.com.jayne.dogquiz.domain.model.Event
+import com.bumptech.glide.Glide
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
 
 class GameFragment: DaggerFragment() {
+
+    @Inject
+    lateinit var connectionStateMonitor: ConnectionStateMonitor
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -22,11 +31,19 @@ class GameFragment: DaggerFragment() {
     private val viewModel: GameViewModel by lazy { ViewModelProvider(requireActivity(), viewModelFactory).get(
         GameViewModel::class.java) }
 
+    val navArgs: GameFragmentArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         Timber.d("onCreate")
-        viewModel?.startGame()
+
+        connectionStateMonitor.internetConnected.observe(this, Observer<Event<Boolean>> { isInternetConnected ->
+            isInternetConnected.consume()?.let{
+                onInternetConnectivityChange(it)
+            }
+        })
+
+        viewModel.startGame(navArgs.game)
     }
 
     override fun onCreateView(
@@ -36,33 +53,43 @@ class GameFragment: DaggerFragment() {
     ): View? {
         binding = GameFragmentBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@GameFragment)
+            viewModel = this@GameFragment.viewModel
 
-            onButton1ClickListener = View.OnClickListener {
-                viewModel?.update()
-            }
-
-            onButton2ClickListener = View.OnClickListener {
-                viewModel?.update()
-            }
-
-            onButton3ClickListener = View.OnClickListener {
-                viewModel?.update()
-            }
-
-            onButton4ClickListener = View.OnClickListener {
-                viewModel?.update()
-            }
-
-            viewModel.score.observe(viewLifecycleOwner, Observer<Int> { userScore ->
+            viewModel?.score?.observe(viewLifecycleOwner, Observer<Int> { userScore ->
                 score.text = userScore.toString()
             })
 
-            viewModel.bonesLeft.observe(viewLifecycleOwner, Observer<Int> { bonesLeft ->
+            viewModel?.bonesLeft?.observe(viewLifecycleOwner, Observer<Int> { bonesLeft ->
                 adjustBonesLeftImages(binding, bonesLeft)
+            })
+
+            viewModel?.dogChallenge?.observe(viewLifecycleOwner, Observer { dogChallenge ->
+                Glide.with(this@GameFragment)
+                    .load(dogChallenge.imageUrl)
+                    .centerCrop()
+                    .into(dogImage)
+            })
+
+            viewModel?.imagesToPreload?.observe(viewLifecycleOwner, Observer { imagesToPreload ->
+                imagesToPreload.forEach {
+                    Timber.d("Preloading $it")
+                    Glide.with(this@GameFragment)
+                        .load(it)
+                        .preload()
+
+                    imagesToPreload.remove(it)
+                }
             })
         }
 
-
+        viewModel.errorMessage.observe(viewLifecycleOwner, Observer { errorMessageEvent ->
+            val errorMessage = errorMessageEvent.consume()
+            errorMessage?.let{
+                Timber.i(it.toString())
+                val dialogFragment = DialogFragmentCreator.createErrorMessageDialog(it.titleResourceId!!, it.messageResourceId!!) // TODO fix this
+                displayDialog(dialogFragment, DialogFragmentCreator.ERROR_MESSAGE_DIALOG_ID)
+            }
+        })
 
         return binding.root
     }
@@ -90,6 +117,15 @@ class GameFragment: DaggerFragment() {
                     bone2.setImageDrawable(resources.getDrawable(R.drawable.ic_bone_outline))
                     bone3.setImageDrawable(resources.getDrawable(R.drawable.ic_bone_outline))
                 }
+            }
+        }
+    }
+
+    private fun onInternetConnectivityChange(isInternetConnected: Boolean) {
+        Timber.d("onInternetConnectivityChange - isInternetConnected: $isInternetConnected, navArgs.game: ${navArgs.game}")
+        if(isInternetConnected) {
+            navArgs.game?.let{
+                viewModel.retryIfInternetFailedPreviously()
             }
         }
     }

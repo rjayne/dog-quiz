@@ -4,9 +4,6 @@
     <color name="colorPrimaryDark">@color/dark_grey</color>
     <color name="colorAccent">@color/green</color>
 
-    <color name="primaryTextDarkX">@color/white</color>
-    <color name="secondaryTextDarkX">@color/light_grey</color>
-
     <color name="primaryTextLightX">@android:color/black</color>
     <color name="secondaryTextLightX">@color/light_grey</color>
 
@@ -45,6 +42,7 @@
     <color name="accent_500">#9E9E9E</color>
 
     <color name="image_tint">#73000000</color>
+    <color name="image_placeholder">#C8C8C8</color>
 
     <!-- Toolbar Colors -->
     <color name="toolbar_background">@color/dark_grey</color>

@@ -3,14 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="button1Label" type="String"/>
-        <variable name="button2Label" type="String"/>
-        <variable name="button3Label" type="String"/>
-        <variable name="button4Label" type="String"/>
-        <variable name="onButton1ClickListener" type="android.view.View.OnClickListener"/>
-        <variable name="onButton2ClickListener" type="android.view.View.OnClickListener"/>
-        <variable name="onButton3ClickListener" type="android.view.View.OnClickListener"/>
-        <variable name="onButton4ClickListener" type="android.view.View.OnClickListener"/>
+        <variable name="viewModel" type="au.com.jayne.dogquiz.feature.game.GameViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -99,89 +92,56 @@
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_card_custom_corners"
-                    android:src="@drawable/ic_test_poodle"
+                    android:background="@color/image_placeholder"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@+id/button_1"
                     />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_1"
                     style="@style/QuizButtonLeft"
-                    android:text="Button 1"
-                    app:onClickListener="@{onButton1ClickListener::onClick}"
+                    android:text="@{viewModel.dogChallenge.dogSelection.get(0).name}"
+                    tools:text="Button 1"
+                    app:onClickListener="@{() -> viewModel.onDogSelected(viewModel.dogChallenge.dogSelection.get(0))}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/button_2"
-                    app:layout_constraintBottom_toTopOf="@+id/button_3"/>
+                    app:layout_constraintBottom_toTopOf="@+id/button_3"
+                    />
 
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/button_1"-->
-<!--                    style="@style/QuizButton"-->
-<!--                    android:text="Button 1"-->
-<!--                    app:onClickListener="@{onButton1ClickListener::onClick}"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/button_2"-->
-<!--                    app:layout_constraintBottom_toTopOf="@+id/button_3"-->
-<!--                    />-->
-
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/button_2"-->
-<!--                    style="@style/QuizButton"-->
-<!--                    android:text="Button 2"-->
-<!--                    app:onClickListener="@{onButton2ClickListener::onClick}"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/button_1"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintBottom_toTopOf="@+id/button_4"-->
-<!--                    />-->
-
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_2"
                     style="@style/QuizButtonRight"
-                    android:layout_marginEnd="5dp"
-                    android:text="Button 2"
-                    app:onClickListener="@{onButton2ClickListener::onClick}"
+                    android:text="@{viewModel.dogChallenge.dogSelection.get(1).name}"
+                    tools:text="Button 2"
+                    app:onClickListener="@{() -> viewModel.onDogSelected(viewModel.dogChallenge.dogSelection.get(1))}"
                     app:layout_constraintStart_toEndOf="@+id/button_1"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/button_4"/>
+                    app:layout_constraintBottom_toTopOf="@+id/button_4"
+                    />
 
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/button_3"-->
-<!--                    style="@style/QuizButton"-->
-<!--                    android:text="Button 3"-->
-<!--                    app:onClickListener="@{onButton3ClickListener::onClick}"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/button_4"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    />-->
-
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_3"
                     style="@style/QuizButtonLeft"
-                    android:text="Button 3"
-                    app:onClickListener="@{onButton3ClickListener::onClick}"
+                    android:text="@{viewModel.dogChallenge.dogSelection.get(2).name}"
+                    tools:text="Button 3"
+                    app:onClickListener="@{() -> viewModel.onDogSelected(viewModel.dogChallenge.dogSelection.get(2))}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/button_4"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
 
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/button_4"-->
-<!--                    style="@style/QuizButton"-->
-<!--                    android:text="Button 4"-->
-<!--                    app:onClickListener="@{onButton4ClickListener::onClick}"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/button_3"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    />-->
-
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_4"
                     style="@style/QuizButtonRight"
-                    android:text="Button 4"
-                    app:onClickListener="@{onButton4ClickListener::onClick}"
+                    android:text="@{viewModel.dogChallenge.dogSelection.get(3).name}"
+                    tools:text="Button 4"
+                    app:onClickListener="@{() -> viewModel.onDogSelected(viewModel.dogChallenge.dogSelection.get(3))}"
                     app:layout_constraintStart_toEndOf="@+id/button_3"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

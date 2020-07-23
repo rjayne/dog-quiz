@@ -4,6 +4,7 @@
 
     <string name="button_yes">Yes</string>
     <string name="button_no">No</string>
+    <string name="button_dismiss">Dismiss</string>
 
     <string name="title_game">Game</string>
     <string name="title_leaderboard">Leaderboard</string>
@@ -23,4 +24,18 @@
 
     <string name="settings_reset_scores_complete_title">High Scores</string>
     <string name="settings_reset_scores_complete_message">All High Scores have been reset!</string>
+
+    <!-- Error message -->
+    <string name="error_game_data_title">Something went wrong</string>
+    <string name="error_game_data_message">An issue occurred when finding the dogs.</string>
+
+    <string name="error_unexpected_title">Something went wrong</string>
+    <string name="error_unexpected_message">An unexpected error has occurred. Please try again later.</string>
+
+    <string name="error_lookup_network_title">Network Request Failed</string>
+    <string name="error_lookup_network_message">Unable to find dogs.</string>
+    <string name="error_lookup_network_message_with_code">Unable to find dogs due to %1$d</string>
+
+    <string name="error_no_internet_title">Network Issue</string>
+    <string name="error_no_internet_message">Please check your internet connection</string>
 </resources>
