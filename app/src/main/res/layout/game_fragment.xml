@@ -124,6 +124,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_3"
                     style="@style/QuizButtonLeft"
+                    android:layout_marginBottom="5dp"
                     android:text="@{viewModel.dogChallenge.dogSelection.get(2).name}"
                     tools:text="Button 3"
                     app:onClickListener="@{() -> viewModel.onDogSelected(viewModel.dogChallenge.dogSelection.get(2))}"
@@ -137,6 +138,7 @@
                     style="@style/QuizButtonRight"
                     android:text="@{viewModel.dogChallenge.dogSelection.get(3).name}"
                     tools:text="Button 4"
+                    android:layout_marginBottom="5dp"
                     app:onClickListener="@{() -> viewModel.onDogSelected(viewModel.dogChallenge.dogSelection.get(3))}"
                     app:layout_constraintStart_toEndOf="@+id/button_3"
                     app:layout_constraintEnd_toEndOf="parent"

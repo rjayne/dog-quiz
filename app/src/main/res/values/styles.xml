@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents">
         <!--   app branding color for the app bar -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+        <item name="colorPrimary">@color/colorAccent</item>
         <!--   darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!--   theme UI controls like checkboxes and text fields -->
@@ -90,7 +91,6 @@
     <style name="QuizButton" parent="PrimaryButton">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">120dp</item>
-<!--        <item name="android:layout_marginBottom">5dp</item>-->
         <item name="android:layout_marginStart">5dp</item>
     </style>
 
