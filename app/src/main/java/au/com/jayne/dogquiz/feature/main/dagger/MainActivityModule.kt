@@ -7,6 +7,8 @@ import au.com.jayne.dogquiz.feature.game.GameFragment
 import au.com.jayne.dogquiz.feature.game.GameViewModel
 import au.com.jayne.dogquiz.feature.main.MainActivity
 import au.com.jayne.dogquiz.feature.main.MainViewModel
+import au.com.jayne.dogquiz.feature.score.ScoresFragment
+import au.com.jayne.dogquiz.feature.score.ScoresViewModel
 import au.com.jayne.dogquiz.feature.selection.GameSelectionFragment
 import au.com.jayne.dogquiz.feature.settings.SettingsFragment
 import dagger.Binds
@@ -27,6 +29,9 @@ abstract class MainActivityModule {
     abstract fun provideGameFragment(): GameFragment
 
     @ContributesAndroidInjector
+    abstract fun provideScoresFragment(): ScoresFragment
+
+    @ContributesAndroidInjector
     abstract fun provideYesNoPreferenceDialogFragment(): YesNoPreferenceDialogFragment
 
     @ContributesAndroidInjector
@@ -41,4 +46,9 @@ abstract class MainActivityModule {
     @IntoMap
     @ViewModelKey(GameViewModel::class)
     internal abstract fun bindGameViewModel(gameViewModel: GameViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ScoresViewModel::class)
+    internal abstract fun bindScoresViewModel(scoresViewModel: ScoresViewModel): ViewModel
 }

@@ -129,7 +129,8 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
                 .load(dogChallenge.imageUrl)
                 .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade())
-                .error(R.drawable.ic_alert)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_image_not_found)
                 .into(object : CustomTarget<Drawable>() {
                     override fun onResourceReady(
                         resource: Drawable,
@@ -157,7 +158,7 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
                     Timber.d("Preloading $it")
                     Glide.with(this@GameFragment)
                         .load(it)
-                        .error(R.drawable.ic_alert)
+                        .error(R.drawable.ic_image_not_found)
                         .preload()
 
                     imagesToPreload.remove(it)

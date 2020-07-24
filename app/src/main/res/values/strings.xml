@@ -16,6 +16,8 @@
     <string name="game_terrier_name">Terrier Test</string>
     <string name="game_doggy_name">Doggy Digest</string>
 
+    <string name="high_score_not_played">---</string>
+
     <string name="setting_category">Settings</string>
     <string name="setting_sounds">Sounds</string>
     <string name="setting_reset_scores">Reset Scores</string>

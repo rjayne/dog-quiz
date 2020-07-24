@@ -10,7 +10,7 @@
         app:allowDividerBelow="false"/>
 
     <au.com.jayne.dogquiz.common.preference.YesNoPreference
-        app:key="highScores"
+        app:key="gameScores"
         app:title="@string/setting_reset_scores"
         android:dialogTitle="@string/setting_reset_scores_dialog_title"
         android:dialogMessage="@string/setting_reset_scores_dialog_message"

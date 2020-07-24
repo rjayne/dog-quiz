@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import au.com.jayne.dogquiz.R
@@ -45,7 +43,7 @@ class SettingsFragment: DaggerPreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_preferences, rootKey)
 
-        val resetScorePreference: YesNoPreference? = findPreference(SharedPreferenceKey.HIGH_SCORES.keyName)
+        val resetScorePreference: YesNoPreference? = findPreference(SharedPreferenceKey.GAME_SCORES.keyName)
         resetScorePreference?.apply {
             onCompletionListener = object: YesNoPreference.OnCompletionListener{
                 override fun onYes() {

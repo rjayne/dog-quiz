@@ -92,7 +92,7 @@
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_card_custom_corners"
-                    android:background="@color/image_placeholder"
+                    android:src="@drawable/ic_placeholder"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

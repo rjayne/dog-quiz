@@ -21,9 +21,9 @@
 
     <fragment
         android:id="@+id/navigation_leaderboard"
-        android:name="au.com.jayne.dogquiz.feature.dashboard.DashboardFragment"
+        android:name="au.com.jayne.dogquiz.feature.score.ScoresFragment"
         android:label="@string/title_leaderboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/scores_fragment" />
 
     <fragment
         android:id="@+id/navigation_help"
