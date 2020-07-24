@@ -1,5 +1,6 @@
 package au.com.jayne.dogquiz.feature.game
 
+import android.media.SoundPool
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+
 
 class GameViewModel  @Inject constructor(private val dogRepository: DogRepository, private val connectionStateMonitor: ConnectionStateMonitor): ViewModel(){
 
@@ -57,6 +59,10 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
 
     private var failureDueToNoInternet = false
 
+    internal var soundPool: SoundPool? = null
+    internal var successSoundId: Int? = null
+    internal var failureSoundId: Int? = null
+
     fun startNewGame(game: Game) {
         Timber.d("startNewGame - $game")
         this.game = game
@@ -84,6 +90,9 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     fun onDogSelected(dog: Dog) {
         if(dog.equals(dogChallenge.value?.dog)) {
             Timber.d("Winner")
+            successSoundId?.let{
+                playSound(it)
+            }
             _score.value = _score.value?.plus(1)
             if(dogsChallenges.isNotEmpty()) {
                 _dogChallenge.value = dogsChallenges.removeAt(0)
@@ -93,12 +102,19 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
             populateDogChallenges()
         } else {
             Timber.d("Wrong choice")
+            failureSoundId?.let{
+                playSound(it)
+            }
             _bonesLeft.value = _bonesLeft.value?.minus(1)
             if(_bonesLeft.value == 0) {
                 //TODO fail
                 Timber.d("GAME OVER")
             }
         }
+    }
+
+    private fun playSound(soundId: Int) {
+        soundPool?.play(soundId, 1f, 1f, 0, 0, 1f);
     }
 
     private fun getRandomDogListGenerator(): RandomDogListGenerator {

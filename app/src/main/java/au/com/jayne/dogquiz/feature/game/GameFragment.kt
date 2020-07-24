@@ -1,6 +1,8 @@
 package au.com.jayne.dogquiz.feature.game
 
 import android.graphics.drawable.Drawable
+import android.media.AudioAttributes
+import android.media.SoundPool
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import au.com.jayne.dogquiz.R
 import au.com.jayne.dogquiz.common.extensions.displayDialog
@@ -18,12 +19,8 @@ import au.com.jayne.dogquiz.common.ui.DialogTargetFragment
 import au.com.jayne.dogquiz.databinding.GameFragmentBinding
 import au.com.jayne.dogquiz.domain.model.*
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
@@ -52,12 +49,6 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
         Timber.d("onCreate")
 
         viewModel.startNewGame(navArgs.game)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-        viewModel.playGame()
     }
 
     override fun onCreateView(
@@ -106,6 +97,30 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
         })
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        loadChimes()
+    }
+
+    private fun loadChimes() {
+        val gameAudioAttributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_GAME).build()
+        viewModel.soundPool = SoundPool.Builder().setAudioAttributes(gameAudioAttributes).setMaxStreams(2).build()
+        viewModel.successSoundId = viewModel.soundPool?.load(context, R.raw.success_chime, 1)
+        viewModel.failureSoundId = viewModel.soundPool?.load(context, R.raw.fail_buzzer, 1)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.soundPool?.release()
+        viewModel.soundPool = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume")
+        viewModel.playGame()
     }
 
     private fun loadDogChallengeImage(dogChallenge: DogChallenge) {
