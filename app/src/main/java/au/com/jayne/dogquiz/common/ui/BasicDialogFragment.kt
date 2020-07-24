@@ -104,7 +104,6 @@ open class BasicDialogFragment: DialogFragment(), DialogInterface.OnClickListene
 
         val contentView = onCreateDialogView(context)
         if (contentView != null) {
-            onBindDialogView(contentView)
             builder.setView(contentView)
         } else {
             builder.setMessage(dialogMessage)
@@ -128,33 +127,6 @@ open class BasicDialogFragment: DialogFragment(), DialogInterface.OnClickListene
 
         val inflater = LayoutInflater.from(context)
         return inflater.inflate(resId, null)
-    }
-
-    /**
-     * Binds views in the content view of the dialog to data.
-     * Make sure to call through to the superclass implementation.
-     *
-     * @param view The content view of the dialog, if it is custom
-     */
-    open fun onBindDialogView(view: View) {
-        val dialogMessageView = view.findViewById<View>(R.id.text_message)
-
-        if (dialogMessageView != null) {
-            val message = dialogMessage
-            var newVisibility = View.GONE
-
-            if (!TextUtils.isEmpty(message)) {
-                if (dialogMessageView is TextView) {
-                    dialogMessageView.text = message
-                }
-
-                newVisibility = View.VISIBLE
-            }
-
-            if (dialogMessageView.visibility != newVisibility) {
-                dialogMessageView.visibility = newVisibility
-            }
-        }
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
