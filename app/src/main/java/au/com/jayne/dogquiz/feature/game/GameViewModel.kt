@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import au.com.jayne.dogquiz.R
 import au.com.jayne.dogquiz.common.network.ConnectionStateMonitor
+import au.com.jayne.dogquiz.common.util.SharedPreferenceStorage
 import au.com.jayne.dogquiz.domain.exception.QuizException
 import au.com.jayne.dogquiz.domain.model.*
 import au.com.jayne.dogquiz.domain.repo.DogRepository
@@ -16,7 +17,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class GameViewModel  @Inject constructor(private val dogRepository: DogRepository, private val connectionStateMonitor: ConnectionStateMonitor): ViewModel(){
+class GameViewModel  @Inject constructor(private val dogRepository: DogRepository, private val connectionStateMonitor: ConnectionStateMonitor, private val sharedPreferenceStorage: SharedPreferenceStorage): ViewModel(){
 
     private var game = Game.DOGGY_QUIZ // default to Doggy Quiz
 
@@ -89,7 +90,6 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
 
     fun onDogSelected(dog: Dog) {
         if(dog.equals(dogChallenge.value?.dog)) {
-            Timber.d("Winner")
             successSoundId?.let{
                 playSound(it)
             }
@@ -114,7 +114,9 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     }
 
     private fun playSound(soundId: Int) {
-        soundPool?.play(soundId, 1f, 1f, 0, 0, 1f);
+        if(sharedPreferenceStorage.isSoundEnabled()) {
+            soundPool?.play(soundId, 1f, 1f, 0, 0, 1f)
+        }
     }
 
     private fun getRandomDogListGenerator(): RandomDogListGenerator {
