@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Keep
-enum class Game(val nameResId: Int, val subBreed: String? = null): Parcelable {
+enum class Game(val nameResId: Int, val breed: String? = null): Parcelable {
     HOUND_QUIZ(R.string.game_hound_name, "hound"),
     SPANIEL_QUIZ(R.string.game_spaniel_name, "spaniel"),
     TERRIER_QUIZ(R.string.game_terrier_name, "terrier"),

@@ -20,7 +20,7 @@ class RepositoryAssistant(val repoErrorDetailsHandler: RepoErrorDetailsHandler) 
     /**
      * T: The response object returned by the API call.
      */
-    suspend fun <T> makeApiCall(apiCall: suspend() -> Response<T>, messageCode: Int, errorLogMessage: String): T {
+    suspend fun <T> makeApiCall(apiCall: suspend() -> Response<T>, messageCode: QuizMessageCode, errorLogMessage: String): T {
         Timber.d("makeApiCall")
 
         try {
@@ -50,48 +50,14 @@ class RepositoryAssistant(val repoErrorDetailsHandler: RepoErrorDetailsHandler) 
         }
     }
 
-    suspend fun makeApiCallExpectingNullBody(apiCall: suspend() -> Response<Void>, messageCode: Int, errorLogMessage: String) {
-        Timber.d("makeApiCall")
-
-        try {
-            var response: Response<Void> = apiCall()
-            val apiResponse = ApiResponse.create(response)
-            when(apiResponse) {
-                is ApiSuccessResponse -> {
-                    handleUnexpectedSuccessfulResponse(apiResponse, errorLogMessage)
-                }
-                is ApiSuccessEmptyResponse -> {
-                    // Expected response
-                }
-                is ApiErrorResponse -> {
-                    handleErrorResponse(apiResponse, messageCode, errorLogMessage)
-                }
-            }
-        } catch(ex: HttpException) {
-            Timber.e(ex, "$errorLogMessage - ${ex.message()} - messageCode: $messageCode")
-            throw QuizException(
-                repoErrorDetailsHandler.getNetworkExceptionDetails(messageCode, ex.code())
-            )
-        } catch(ex: SocketException) {
-            Timber.e(ex, "$errorLogMessage - ${ex.message} - messageCode: $messageCode")
-            throw QuizException(
-                repoErrorDetailsHandler.getUnexpectedErrorDetails(messageCode)
-            )
-        }
-    }
-
     private fun <T> handleUnexpectedSuccessfulEmptyResponse(errorLogMessage: String): T {
         Timber.e("$errorLogMessage - No values were supplied, but call deemed successful. We don't expect this type of response.")
         throw QuizException(
-            repoErrorDetailsHandler.getUnexpectedErrorDetails(QuizMessageCode.NO_DATA_RETURNED.messageCode)
+            repoErrorDetailsHandler.getUnexpectedErrorDetails(QuizMessageCode.NO_DATA_RETURNED)
         )
     }
 
-    private fun <T> handleUnexpectedSuccessfulResponse(apiResponse: ApiSuccessResponse<T>, errorLogMessage: String) {
-        Timber.e("handleUnexpectedSuccessfulResponse - Unexpected: ${apiResponse.data} for $errorLogMessage")
-    }
-
-    private fun <T>  handleErrorResponse(apiResponse: ApiErrorResponse<T>, messageCode: Int, errorLogMessage: String): T {
+    private fun <T>  handleErrorResponse(apiResponse: ApiErrorResponse<T>, messageCode: QuizMessageCode, errorLogMessage: String): T {
         Timber.d("handleErrorResponse $errorLogMessage - ${apiResponse.errorMessage} ${apiResponse.errorBody}")
 
         apiResponse.errorBody?.let{ errorBody ->

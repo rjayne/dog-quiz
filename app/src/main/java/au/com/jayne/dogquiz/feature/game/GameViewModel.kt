@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import au.com.jayne.dogquiz.R
 import au.com.jayne.dogquiz.common.network.ConnectionStateMonitor
-import au.com.jayne.dogquiz.common.util.ResourceProvider
 import au.com.jayne.dogquiz.domain.exception.QuizException
 import au.com.jayne.dogquiz.domain.model.*
 import au.com.jayne.dogquiz.domain.repo.DogRepository
@@ -15,7 +14,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class GameViewModel  @Inject constructor(private val dogRepository: DogRepository, private val connectionStateMonitor: ConnectionStateMonitor, val resourceProvider: ResourceProvider): ViewModel(){
+class GameViewModel  @Inject constructor(private val dogRepository: DogRepository, private val connectionStateMonitor: ConnectionStateMonitor): ViewModel(){
 
     private var game = Game.DOGGY_QUIZ // default to Doggy Quiz
 
@@ -33,44 +32,65 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     val bonesLeft: LiveData<Int>
         get() = _bonesLeft
 
-    internal val _errorMessage = MutableLiveData<Event<MessageContainer>>()
-    val errorMessage: LiveData<Event<MessageContainer>>
+    internal val _errorMessage = MutableLiveData<Event<MessageDetails>>()
+    val errorMessage: LiveData<Event<MessageDetails>>
         get() = _errorMessage
 
     var ioDispatcher = Dispatchers.IO
 
-    private val unexpectedErrorMessageTitle by lazy { resourceProvider.getString(R.string.error_unexpected_title) }
+    // Cache the different RandomDogListGenerators, so that the base data doesn't need to be
+    // repopulated if the user returns to the game after playing a different game. This is just for
+    // speed of loading.
+    private val spanielGenerator: DogInBreedGenerator by lazy { DogInBreedGenerator(Game.SPANIEL_QUIZ.breed!!, dogRepository) }
+    private val houndGenerator: DogInBreedGenerator by lazy { DogInBreedGenerator(Game.HOUND_QUIZ.breed!!, dogRepository) }
+    private val terrierGenerator: DogInBreedGenerator by lazy { DogInBreedGenerator(Game.TERRIER_QUIZ.breed!!, dogRepository) }
+    private val doggyDogGenerator: DoggyDogGenerator by lazy { DoggyDogGenerator(dogRepository) }
+
+    // Lazy load error messages
+    private val unexpectedErrorMessageTitle = R.string.error_unexpected_title
     private val unexpectedErrorMessage by lazy {
-        MessageContainer(unexpectedErrorMessageTitle, resourceProvider.getString(R.string.error_unexpected_message))
-    }
-    private val noInternetErrorMessage by lazy {
-        MessageContainer(resourceProvider.getString(R.string.error_no_internet_title), resourceProvider.getString(R.string.error_no_internet_message))
+        MessageDetails(QuizMessageCode.UNKNOWN, MessageContainer(R.string.error_unexpected_message, unexpectedErrorMessageTitle))
     }
 
-    private lateinit var randomDogListGenerator: RandomDogListGenerator
+    private var randomDogListGenerator: RandomDogListGenerator? = null
     private val dogsChallenges = ArrayList<DogChallenge>()
 
     private var failureDueToNoInternet = false
 
-    fun startGame(game: Game) {
+    fun startNewGame(game: Game) {
+        Timber.d("startNewGame - $game")
         this.game = game
-        _score.value = 0
-        _bonesLeft.value = 3
-        imagesToPreload.value = ArrayList()
+        clearGame()
 
         randomDogListGenerator = getRandomDogListGenerator()
+    }
 
+    fun playGame() {
+        Timber.d("playGame")
         viewModelScope.launch(ioDispatcher) {
-            initGame()
+            populateDogChallenges()
         }
+    }
+
+    fun clearGame() {
+        _dogChallenge.value = null
+        _score.value = 0
+        _bonesLeft.value = 3
+        _errorMessage.value = null
+        imagesToPreload.value = ArrayList()
+        dogsChallenges.clear()
     }
 
     fun onDogSelected(dog: Dog) {
         if(dog.equals(dogChallenge.value?.dog)) {
             Timber.d("Winner")
             _score.value = _score.value?.plus(1)
-            _dogChallenge.value = dogsChallenges.removeAt(0)
-            populateDogsWithImages()
+            if(dogsChallenges.isNotEmpty()) {
+                _dogChallenge.value = dogsChallenges.removeAt(0)
+            } else {
+                _dogChallenge.value = null
+            }
+            populateDogChallenges()
         } else {
             Timber.d("Wrong choice")
             _bonesLeft.value = _bonesLeft.value?.minus(1)
@@ -82,25 +102,25 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     }
 
     private fun getRandomDogListGenerator(): RandomDogListGenerator {
-        if(game.subBreed != null) {
-            return DogInBreedGenerator(game.subBreed!!, dogRepository)
-        } else {
-            return DoggyDogGenerator(dogRepository)
+        when(game) {
+            Game.SPANIEL_QUIZ -> {
+                return spanielGenerator
+            }
+            Game.HOUND_QUIZ -> {
+                return houndGenerator
+            }
+            Game.TERRIER_QUIZ -> {
+                return terrierGenerator
+            }
+            else -> {
+                return doggyDogGenerator
+            }
         }
     }
 
-    private suspend fun initGame() {
-        clearErrorMessage()
-        lookupDogs()
-        populateDogsWithImages()
-    }
-
-    private suspend fun lookupDogs() {
-        makeNetworkCall<List<Dog>>(randomDogListGenerator::getDogList)
-    }
-
-    private fun populateDogsWithImages() {
+    private fun populateDogChallenges() {
         viewModelScope.launch(ioDispatcher) {
+            Timber.d("populateDogChallenges - dogsChallenges.size: ${dogsChallenges.size}")
             while (dogsChallenges.size < MIN_CHALLENGES_POPULATED) {
                 val dogChallenge = getDogChallenge()
                 if (dogChallenge == null) break // If error occurred, do not try again
@@ -121,13 +141,19 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     }
 
     private suspend fun getDogChallenge(): DogChallenge? {
-        val dog = makeNetworkCall<List<Dog>>(randomDogListGenerator::getDogList)?.shuffled()?.first()
-        dog?.let{
-            val dogSelection = ArrayList<Dog>()
-            dogSelection.add(dog)
-            dogSelection.addAll(randomDogListGenerator.getRandomDogsWithExclusion(dog))
+        randomDogListGenerator?.let{ randomDogListGenerator ->
 
-            return DogChallenge(dog, dogRepository.getRandomImage(dog), dogSelection.shuffled())
+            val dog = makeNetworkCall<List<Dog>>(randomDogListGenerator::getDogList)?.shuffled()?.first()
+            dog?.let{
+                val dogSelection = ArrayList<Dog>()
+                dogSelection.add(dog)
+                dogSelection.addAll(randomDogListGenerator.getRandomDogsWithExclusion(dog))
+
+                val randomImageUrl = makeNetworkCall<String>({dogRepository.getRandomImage(dog)})?: ""
+                randomImageUrl?.let{
+                    return DogChallenge(dog, randomImageUrl, dogSelection.shuffled())
+                }
+            }
         }
 
         return null
@@ -142,10 +168,10 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
             Timber.d("QuizException caught - ${ex.messageDetails}")
             viewModelScope.launch(Dispatchers.Main) {
                 if (connectionStateMonitor.hasInternetConnection()) {
-                    displayError(getErrorMessage(ex.messageDetails))
+                    displayError(ex.messageDetails)
                 } else {
                     failureDueToNoInternet = true
-                    displayNoInternetMessage()
+                    displayNoInternetMessage(ex.messageDetails.messageCode)
                 }
             }
         } catch (throwable: Throwable) {
@@ -158,7 +184,7 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
                     displayError(unexpectedErrorMessage)
                 } else {
                     failureDueToNoInternet = true
-                    displayNoInternetMessage()
+                    displayNoInternetMessage(QuizMessageCode.NO_INTERNET_CONNECTION)
                 }
             }
         }
@@ -167,54 +193,42 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     }
 
     fun retryIfInternetFailedPreviously() {
+        Timber.d("retryIfInternetFailedPreviously - failureDueToNoInternet: $failureDueToNoInternet")
         if(failureDueToNoInternet) {
             failureDueToNoInternet = false
             if(dogsChallenges.size < MIN_CHALLENGES_POPULATED) {
+                Timber.d("Retry loading due to previoiusly failed internet. dogsChallenges.size = ${dogsChallenges.size}")
                 viewModelScope.launch(ioDispatcher) {
-                    initGame()
+                    populateDogChallenges()
                 }
             }
         }
     }
 
-    private fun checkInternetConnection(): Boolean {
+    fun checkInternetConnection(): Boolean {
         if(!connectionStateMonitor.hasInternetConnection()) {
-            displayNoInternetMessage()
+            val code = if(_dogChallenge.value == null) QuizMessageCode.ALL_DOGS_LOOKUP_FAILURE else QuizMessageCode.NO_INTERNET_CONNECTION
+            failureDueToNoInternet = true
+            displayNoInternetMessage(code)
             return false
         }
 
         return true
     }
 
-    private fun displayError(errorMessage: MessageContainer) {
-        _errorMessage.value = Event(errorMessage)
-    }
-
-    private fun clearErrorMessage() {
-        if(_errorMessage.value != null) {
+    private fun displayError(errorMessage: MessageDetails) {
+        viewModelScope.launch(Dispatchers.Main) {
             _errorMessage.value = null
+            _errorMessage.value = Event(errorMessage)
         }
     }
 
-    private fun displayNoInternetMessage() {
-        displayError(noInternetErrorMessage)
+    private fun displayNoInternetMessage(messageCode: QuizMessageCode) {
+        displayError(getNoInternetErrorMessage(messageCode))
     }
 
-    private fun getErrorMessage(messageDetails: MessageDetails): MessageContainer {
-        messageDetails.message.messageResourceId?.let{
-            return MessageContainer(unexpectedErrorMessageTitle, resourceProvider.getString(it))
-        }
-
-        messageDetails.message.messageText?.let{
-            return MessageContainer(unexpectedErrorMessageTitle, it)
-        }
-
-        return unexpectedErrorMessage
-    }
-
-    fun update() {
-        _score.value = _score.value?.plus(1)
-        _bonesLeft.value = _bonesLeft.value?.minus(1)
+    private fun getNoInternetErrorMessage(messageCode: QuizMessageCode): MessageDetails {
+        return MessageDetails(messageCode, MessageContainer(R.string.error_no_internet_message, R.string.error_no_internet_title))
     }
 
     companion object {

@@ -14,7 +14,7 @@ class DogRepository(resourceProvider: ResourceProvider, private val dogApiServic
     suspend fun getDogList(): BreedResponse {
         return repositoryAssistant.makeApiCall(
             suspend { dogApiService.getDogList() },
-            QuizMessageCode.LOOKUP_FAILURE.messageCode,
+            QuizMessageCode.ALL_DOGS_LOOKUP_FAILURE,
             "Failed to retrieve all dogs list"
         )
     }
@@ -22,7 +22,7 @@ class DogRepository(resourceProvider: ResourceProvider, private val dogApiServic
     suspend fun getSubBreedList(breed: String): SubBreedResponse {
         return repositoryAssistant.makeApiCall(
             suspend { dogApiService.getSubBreedList(breed) },
-            QuizMessageCode.LOOKUP_FAILURE.messageCode,
+            QuizMessageCode.LOOKUP_FAILURE,
             "Failed to retrieve sub breeds for $breed"
         )
     }
@@ -38,7 +38,7 @@ class DogRepository(resourceProvider: ResourceProvider, private val dogApiServic
     private suspend fun getRandomImageForBreed(breed: String): String {
         return repositoryAssistant.makeApiCall(
             suspend { dogApiService.getRandomImageForBreed(breed) },
-            QuizMessageCode.LOOKUP_FAILURE.messageCode,
+            QuizMessageCode.LOOKUP_FAILURE,
             "Failed to retrieve image for $breed"
         ).url
     }
@@ -46,7 +46,7 @@ class DogRepository(resourceProvider: ResourceProvider, private val dogApiServic
     private suspend fun getRandomImageForSubBreed(breed: String, subBreed: String): String {
         return repositoryAssistant.makeApiCall(
             suspend { dogApiService.getRandomImageForSubBreed(breed, subBreed) },
-            QuizMessageCode.LOOKUP_FAILURE.messageCode,
+            QuizMessageCode.LOOKUP_FAILURE,
             "Failed to retrieve image for $breed $subBreed"
         ).url
     }

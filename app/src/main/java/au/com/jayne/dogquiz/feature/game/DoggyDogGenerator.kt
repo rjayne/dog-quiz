@@ -2,12 +2,14 @@ package au.com.jayne.dogquiz.feature.game
 
 import au.com.jayne.dogquiz.domain.model.Dog
 import au.com.jayne.dogquiz.domain.repo.DogRepository
+import timber.log.Timber
 
 class DoggyDogGenerator(private val dogRepository: DogRepository): RandomDogListGenerator {
 
-    private var dogsList: ArrayList<Dog>? = null
+    private  var dogsList: ArrayList<Dog>? = null
 
     override suspend fun getDogList(): List<Dog> {
+        Timber.d("getDogList")
         if(dogsList.isNullOrEmpty()) {
             dogsList = ArrayList<Dog>()
 
@@ -24,7 +26,9 @@ class DoggyDogGenerator(private val dogRepository: DogRepository): RandomDogList
             }
 
             dogsList?.shuffle()
+            Timber.d("getDogList populated")
         }
+
         return dogsList!!
     }
 
