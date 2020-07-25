@@ -127,6 +127,7 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                Timber.d("handleOnBackPressed")
                 if(!viewModel.checkHighScore()) { // if no high score, go back
                     findNavController().popBackStack()
                 }
