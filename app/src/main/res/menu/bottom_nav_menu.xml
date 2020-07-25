@@ -12,9 +12,9 @@
         android:title="@string/title_leaderboard" />
 
     <item
-        android:id="@+id/navigation_help"
+        android:id="@+id/navigation_instructions"
         android:icon="@drawable/ic_help_white_18dp"
-        android:title="@string/title_help" />
+        android:title="@string/title_instructions" />
 
     <item
         android:id="@+id/navigation_settings"

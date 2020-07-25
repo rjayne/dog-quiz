@@ -26,10 +26,10 @@
         tools:layout="@layout/scores_fragment" />
 
     <fragment
-        android:id="@+id/navigation_help"
-        android:name="au.com.jayne.dogquiz.feature.notifications.NotificationsFragment"
-        android:label="@string/title_help"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_instructions"
+        android:name="au.com.jayne.dogquiz.feature.help.InstructionsFragment"
+        android:label="@string/title_instructions"
+        tools:layout="@layout/instructions_fragment" />
 
     <fragment
         android:id="@+id/navigation_settings"
