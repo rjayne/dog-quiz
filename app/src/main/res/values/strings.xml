@@ -17,9 +17,12 @@
     <string name="game_terrier_name">Terrier Test</string>
     <string name="game_doggy_name">Doggy Digest</string>
 
-    <string name="high_score_achieved_description">Congratulations!\n\nYou have achieved the highest score for this game.\n\nPlease enter your name for the record.</string>
+    <string name="high_score_achieved_title">Congratulations!</string>
+    <string name="high_score_achieved_description">You have achieved the highest score for this game.\n\nPlease enter your name for the record.</string>
     <string name="unknown_player">Anonymous</string>
     <string name="high_score_not_played">---</string>
+
+    <string name="game_over_title">GAME OVER</string>
 
     <string name="setting_category">Settings</string>
     <string name="setting_sounds">Sounds</string>

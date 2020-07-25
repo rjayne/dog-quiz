@@ -36,6 +36,7 @@ class SharedPreferenceStorage @Inject constructor(sharedPreferences: SharedPrefe
         }
 
         setGameScores(gameScores)
+        setLastNameUsed(highScore.name)
     }
 
     private fun setGameScores(gameScores: GameScores) {
@@ -51,5 +52,13 @@ class SharedPreferenceStorage @Inject constructor(sharedPreferences: SharedPrefe
         }
 
         return null
+    }
+
+    fun getLastNameUsed(): String? {
+        return sharedPreferenceAccessor.getStringFromPreferences(SharedPreferenceKey.LAST_NAME_USED)
+    }
+
+    fun setLastNameUsed(name: String) {
+        sharedPreferenceAccessor.editSharedPreferences(SharedPreferenceKey.LAST_NAME_USED, name)
     }
 }

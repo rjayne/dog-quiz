@@ -1,15 +1,14 @@
 package au.com.jayne.dogquiz.feature.game
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -18,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import au.com.jayne.dogquiz.R
 import au.com.jayne.dogquiz.common.extensions.displayDialog
+import au.com.jayne.dogquiz.common.extensions.getPositiveOkButtonDialog
 import au.com.jayne.dogquiz.common.network.ConnectionStateMonitor
 import au.com.jayne.dogquiz.common.ui.DialogFragmentCreator
 import au.com.jayne.dogquiz.common.ui.DialogTargetFragment
@@ -66,7 +66,7 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
     ): View? {
         binding = GameFragmentBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@GameFragment)
-            if(viewModel?.dogChallenge?.value == null) {
+            if (viewModel?.dogChallenge?.value == null) {
                 contentLoadingProgressBar.setVisibility(View.VISIBLE)
             }
 
@@ -75,30 +75,44 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
             viewModel?.score?.observe(viewLifecycleOwner, Observer<Int> { userScore ->
                 score.text = userScore.toString()
             })
-
-            viewModel?.bonesLeft?.observe(viewLifecycleOwner, Observer<Int> { bonesLeft ->
-                adjustBonesLeftImages(binding, bonesLeft)
-            })
-
-            viewModel?.dogChallenge?.observe(viewLifecycleOwner, Observer { dogChallenge ->
-                dogChallenge?.let{
-                    loadDogChallengeImage(dogChallenge)
-                }
-            })
-
-            viewModel?.imagesToPreload?.observe(viewLifecycleOwner, Observer { imagesToPreload ->
-                if(viewModel?.checkInternetConnection() == true) {
-                    preloadDogChallengeImages(imagesToPreload)
-                }
-            })
-
-            viewModel?.highScoreAchieved?.observe(viewLifecycleOwner, Observer { highScoreAchieved ->
-                if(highScoreAchieved) {
-                    displayConfetti()
-                    displayHighScoreDialog()
-                }
-            })
         }
+
+        viewModel?.bonesLeft?.observe(viewLifecycleOwner, Observer<Int> { bonesLeft ->
+            adjustBonesLeftImages(binding, bonesLeft)
+        })
+
+        viewModel?.dogChallenge?.observe(viewLifecycleOwner, Observer { dogChallenge ->
+            dogChallenge?.let{
+                loadDogChallengeImage(dogChallenge)
+            }
+        })
+
+        viewModel?.imagesToPreload?.observe(viewLifecycleOwner, Observer { imagesToPreload ->
+            if(viewModel?.checkInternetConnection() == true) {
+                preloadDogChallengeImages(imagesToPreload)
+            }
+        })
+
+        viewModel?.highScoreAchieved?.observe(viewLifecycleOwner, Observer { highScoreAchievedEvent ->
+            val highScoreAchieved = highScoreAchievedEvent?.consume()
+            if(highScoreAchieved == true) {
+                displayConfetti()
+                displayHighScoreDialog()
+            }
+        })
+
+        viewModel?.gameOver?.observe(viewLifecycleOwner, Observer { gameOverEvent ->
+            val gameOver = gameOverEvent?.consume()
+            if(gameOver == true) {
+                val gameOverFragment = getPositiveOkButtonDialog(R.string.game_over_title, null, DialogInterface.OnDismissListener {
+                    endGame()
+                })
+                gameOverFragment?.apply {
+                    setCanceledOnTouchOutside(false)
+                    show()
+                }
+            }
+        })
 
         viewModel.errorMessage.observe(viewLifecycleOwner, Observer { errorMessageEvent ->
             val errorMessageDetails = errorMessageEvent?.consume()
@@ -113,7 +127,7 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if(!viewModel.gameOverCheckForHighScore()) { // if no high score, go back
+                if(!viewModel.checkHighScore()) { // if no high score, go back
                     findNavController().popBackStack()
                 }
             }
@@ -259,15 +273,11 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
     private fun displayHighScoreDialog() {
         Timber.d("displayHighScoreDialog")
         val dialogContent = DialogContent(id = HIGHEST_SCORE_DIALOG_ID,
-            titleResId = R.string.high_score_achieved_description,
+            titleResId = R.string.high_score_achieved_title,
+            messageResId = R.string.high_score_achieved_description,
             positiveButtonTextResId = R.string.button_ok,
             layoutResId = R.layout.dialog_edittext)
-        val dialogFragment = EditTextDialogFragment.newInstance(dialogContent)
-        dialogFragment.onBindEditTextListener = object: EditTextDialogFragment.OnBindEditTextListener{
-            override fun onBindEditText(editText: EditText) {
-                editText.inputType = InputType.TYPE_CLASS_TEXT
-            }
-        }
+        val dialogFragment = EditTextDialogFragment.newInstance(dialogContent, viewModel.getLastNameEntered())
         displayDialog(dialogFragment, HIGHEST_SCORE_DIALOG_ID)
     }
 
@@ -286,13 +296,17 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
                 newValue?.let{
                     viewModel.recordHighScore(it as String)
                 }
-                viewModel.clearGame()
-                findNavController().popBackStack()
+                endGame()
             }
             else -> {
                 // close and do nothing
             }
         }
+    }
+
+    private fun endGame() {
+        viewModel.clearGame()
+        findNavController().popBackStack()
     }
 
     companion object {

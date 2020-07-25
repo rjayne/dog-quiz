@@ -20,6 +20,8 @@ open class EditTextDialogFragment: StandardInputDialogFragment<String>() {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
             textValue = savedInstanceState.getCharSequence(SAVE_STATE_TEXT)
+        } else {
+            textValue = requireArguments().getString(ARG_TEXT)
         }
     }
 
@@ -44,22 +46,21 @@ open class EditTextDialogFragment: StandardInputDialogFragment<String>() {
         }
     }
 
-    override fun needInputMethod(): Boolean {
-        // We want the input method to show, if possible, when dialog is displayed
-        return true
-    }
-
     override fun getSubmittedValue(): String? {
         return editText?.text.toString()
     }
 
     companion object {
         private const val SAVE_STATE_TEXT = "EditTextDialogFragment.text"
+        private const val ARG_TEXT = "prepopulatedText"
 
-        fun newInstance(content: DialogContent): EditTextDialogFragment {
+        fun newInstance(content: DialogContent, prePopulatedTextValue: String?): EditTextDialogFragment {
             val fragment = EditTextDialogFragment()
             val b = Bundle(1)
             b.putParcelable(ARG_CONTENT, content)
+            prePopulatedTextValue?.let{
+                b.putString(ARG_TEXT, it)
+            }
             fragment.arguments = b
             return fragment
         }
@@ -79,4 +80,5 @@ open class EditTextDialogFragment: StandardInputDialogFragment<String>() {
          */
         fun onBindEditText(editText: EditText)
     }
+
 }
