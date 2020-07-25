@@ -48,7 +48,11 @@ class SettingsFragment: DaggerPreferenceFragmentCompat() {
             onCompletionListener = object: YesNoPreference.OnCompletionListener{
                 override fun onYes() {
                     sharedPreferenceStorage.resetHighScores()
-                    getPositiveOkButtonDialog(R.string.settings_reset_scores_complete_title, R.string.settings_reset_scores_complete_message)?.show()
+                    val scoresResetFragment = getPositiveOkButtonDialog(R.string.settings_reset_scores_complete_title, R.string.settings_reset_scores_complete_message)
+                    scoresResetFragment?.apply {
+                        setCanceledOnTouchOutside(false)
+                        show()
+                    }
                 }
 
                 override fun onNo() {
