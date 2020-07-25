@@ -7,8 +7,8 @@
 
     <item android:top="475dp"
         android:gravity="center"
-        android:width="920px"
-        android:height="119px"
+        android:width="306dp"
+        android:height="40dp"
         android:drawable="@drawable/ic_splash_title"/>
 
 </layer-list>
