@@ -1,12 +1,15 @@
 package au.com.jayne.dogquiz.feature.game
 
 import android.media.SoundPool
+import android.text.InputType
+import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import au.com.jayne.dogquiz.R
 import au.com.jayne.dogquiz.common.network.ConnectionStateMonitor
+import au.com.jayne.dogquiz.common.util.ResourceProvider
 import au.com.jayne.dogquiz.common.util.SharedPreferenceStorage
 import au.com.jayne.dogquiz.domain.exception.QuizException
 import au.com.jayne.dogquiz.domain.model.*
@@ -17,7 +20,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class GameViewModel  @Inject constructor(private val dogRepository: DogRepository, private val connectionStateMonitor: ConnectionStateMonitor, private val sharedPreferenceStorage: SharedPreferenceStorage): ViewModel(){
+class GameViewModel  @Inject constructor(private val dogRepository: DogRepository, private val connectionStateMonitor: ConnectionStateMonitor, private val sharedPreferenceStorage: SharedPreferenceStorage, private val resourceProvider: ResourceProvider): ViewModel(){
 
     private var game = Game.DOGGY_QUIZ // default to Doggy Quiz
 
@@ -34,6 +37,10 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     private val _bonesLeft = MutableLiveData<Int>(0)
     val bonesLeft: LiveData<Int>
         get() = _bonesLeft
+
+    private val _highScoreAchieved = MutableLiveData<Boolean>(false)
+    val highScoreAchieved: LiveData<Boolean>
+        get() = _highScoreAchieved
 
     internal val _errorMessage = MutableLiveData<Event<MessageDetails>>()
     val errorMessage: LiveData<Event<MessageDetails>>
@@ -64,12 +71,16 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     internal var successSoundId: Int? = null
     internal var failureSoundId: Int? = null
 
+    private var highScore: HighScore? = null
+
     fun startNewGame(game: Game) {
         Timber.d("startNewGame - $game")
         this.game = game
         clearGame()
 
         randomDogListGenerator = getRandomDogListGenerator()
+
+        highScore = sharedPreferenceStorage.getGameScores()?.highScoresMap?.get(game)
     }
 
     fun playGame() {
@@ -80,6 +91,7 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     }
 
     fun clearGame() {
+        _highScoreAchieved.value = false
         _dogChallenge.value = null
         _score.value = 0
         _bonesLeft.value = 3
@@ -90,27 +102,62 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
 
     fun onDogSelected(dog: Dog) {
         if(dog.equals(dogChallenge.value?.dog)) {
-            successSoundId?.let{
-                playSound(it)
-            }
-            _score.value = _score.value?.plus(1)
-            if(dogsChallenges.isNotEmpty()) {
-                _dogChallenge.value = dogsChallenges.removeAt(0)
-            } else {
-                _dogChallenge.value = null
-            }
-            populateDogChallenges()
+            scoreAchieved()
+            displayNextChallenge()
         } else {
-            Timber.d("Wrong choice")
-            failureSoundId?.let{
-                playSound(it)
-            }
-            _bonesLeft.value = _bonesLeft.value?.minus(1)
-            if(_bonesLeft.value == 0) {
-                //TODO fail
-                Timber.d("GAME OVER")
+            boneLost()
+        }
+    }
+
+    private fun scoreAchieved() {
+        successSoundId?.let{
+            playSound(it)
+        }
+        _score.value = _score.value?.plus(1)
+    }
+
+    private fun displayNextChallenge() {
+        if(dogsChallenges.isNotEmpty()) {
+            _dogChallenge.value = dogsChallenges.removeAt(0)
+        } else {
+            _dogChallenge.value = null
+        }
+        populateDogChallenges()
+    }
+
+    private fun boneLost() {
+        failureSoundId?.let{
+            playSound(it)
+        }
+        _bonesLeft.value = _bonesLeft.value?.minus(1)
+
+        if(_bonesLeft.value == 0) {
+            gameOverCheckForHighScore()
+        }
+    }
+
+    fun gameOverCheckForHighScore(): Boolean {
+        Timber.d("GAME OVER")
+        if(highScore == null) {
+            _highScoreAchieved.value = true
+            return true
+        }
+        highScore?.let{ highScore ->
+            if(highScore.score < _score.value!!) {
+                _highScoreAchieved.value = true
+                return true
             }
         }
+
+        return false
+    }
+
+    fun recordHighScore(playerName: String? = null) {
+        var name = playerName
+        if(playerName.isNullOrBlank()) {
+            name = resourceProvider.getString(R.string.unknown_player)
+        }
+        sharedPreferenceStorage.setGameScore(game, HighScore(name!!, _score.value!!))
     }
 
     private fun playSound(soundId: Int) {
@@ -251,5 +298,6 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
 
     companion object {
         val MIN_CHALLENGES_POPULATED = 10
+        val ANONYMOUS = "Anonymous"
     }
 }

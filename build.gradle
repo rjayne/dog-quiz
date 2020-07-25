@@ -72,6 +72,8 @@ ext {
     retroFitVersion = '2.9.0'
     okHttpVersion = '4.7.2'
 
+    konfettiVersion = '1.2.2'
+
     jUnitVersion = '4.13'
     testRunnerVersion = '1.2.0'
     testRulesVersion = '1.2.0'

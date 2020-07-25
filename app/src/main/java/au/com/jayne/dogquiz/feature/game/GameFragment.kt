@@ -1,21 +1,27 @@
 package au.com.jayne.dogquiz.feature.game
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import au.com.jayne.dogquiz.R
 import au.com.jayne.dogquiz.common.extensions.displayDialog
 import au.com.jayne.dogquiz.common.network.ConnectionStateMonitor
 import au.com.jayne.dogquiz.common.ui.DialogFragmentCreator
 import au.com.jayne.dogquiz.common.ui.DialogTargetFragment
+import au.com.jayne.dogquiz.common.ui.EditTextDialogFragment
 import au.com.jayne.dogquiz.databinding.GameFragmentBinding
 import au.com.jayne.dogquiz.domain.model.*
 import com.bumptech.glide.Glide
@@ -23,6 +29,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import dagger.android.support.DaggerFragment
+import nl.dionsegijn.konfetti.models.Shape
+import nl.dionsegijn.konfetti.models.Size
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -83,6 +91,13 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
                     preloadDogChallengeImages(imagesToPreload)
                 }
             })
+
+            viewModel?.highScoreAchieved?.observe(viewLifecycleOwner, Observer { highScoreAchieved ->
+                if(highScoreAchieved) {
+                    displayConfetti()
+                    displayHighScoreDialog()
+                }
+            })
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner, Observer { errorMessageEvent ->
@@ -93,6 +108,14 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
         connectionStateMonitor.internetConnected.observe(viewLifecycleOwner, Observer<Event<Boolean>> { isInternetConnected ->
             isInternetConnected.consume()?.let{
                 onInternetConnectivityChange(it)
+            }
+        })
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(!viewModel.gameOverCheckForHighScore()) { // if no high score, go back
+                    findNavController().popBackStack()
+                }
             }
         })
 
@@ -199,6 +222,19 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
         }
     }
 
+    private fun displayConfetti() {
+        binding.konfetti.build()
+            .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+            .setDirection(0.0, 359.0)
+            .setSpeed(1f, 5f)
+            .setFadeOutEnabled(true)
+            .setTimeToLive(2000L)
+            .addShapes(Shape.Square, Shape.Circle)
+            .addSizes(Size(12))
+            .setPosition(-50f, binding.konfetti.width + 50f, -50f, -50f)
+            .streamFor(300, 5000L)
+    }
+
     private fun handleErrorMessage(errorMessageDetails: MessageDetails?) {
         messageDialogFragment?.let{
             if(it.dialog?.isShowing == true) {
@@ -220,6 +256,21 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
         }
     }
 
+    private fun displayHighScoreDialog() {
+        Timber.d("displayHighScoreDialog")
+        val dialogContent = DialogContent(id = HIGHEST_SCORE_DIALOG_ID,
+            titleResId = R.string.high_score_achieved_description,
+            positiveButtonTextResId = R.string.button_ok,
+            layoutResId = R.layout.dialog_edittext)
+        val dialogFragment = EditTextDialogFragment.newInstance(dialogContent)
+        dialogFragment.onBindEditTextListener = object: EditTextDialogFragment.OnBindEditTextListener{
+            override fun onBindEditText(editText: EditText) {
+                editText.inputType = InputType.TYPE_CLASS_TEXT
+            }
+        }
+        displayDialog(dialogFragment, HIGHEST_SCORE_DIALOG_ID)
+    }
+
     private fun onInternetConnectivityChange(isInternetConnected: Boolean) {
         Timber.d("onInternetConnectivityChange - isInternetConnected: $isInternetConnected, navArgs.game: ${navArgs.game}")
         if(isInternetConnected) {
@@ -231,8 +282,12 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
 
     override fun <T> onDialogClosed(dialogId: String, positiveButtonClick: Boolean, newValue: T?) {
         when(dialogId) {
-            NO_DATA_DIALOG_ID -> {
-//                findNavController().popBackStack()
+            HIGHEST_SCORE_DIALOG_ID -> {
+                newValue?.let{
+                    viewModel.recordHighScore(it as String)
+                }
+                viewModel.clearGame()
+                findNavController().popBackStack()
             }
             else -> {
                 // close and do nothing
@@ -241,7 +296,8 @@ class GameFragment: DaggerFragment(), DialogTargetFragment {
     }
 
     companion object {
-        var ERROR_MESSAGE_DIALOG_ID = "au.com.jayne.dogquiz.common.ui.ERROR_MESSAGE_DIALOG_ID"
-        var NO_DATA_DIALOG_ID = "au.com.jayne.dogquiz.common.ui.NO_DATA_DIALOG_ID"
+        private var ERROR_MESSAGE_DIALOG_ID = "au.com.jayne.dogquiz.feature.game.ERROR_MESSAGE_DIALOG_ID"
+        private var NO_DATA_DIALOG_ID = "au.com.jayne.dogquiz.feature.game.NO_DATA_DIALOG_ID"
+        private var HIGHEST_SCORE_DIALOG_ID = "au.com.jayne.dogquiz.feature.game.HIGHEST_SCORE_DIALOG_ID"
     }
 }

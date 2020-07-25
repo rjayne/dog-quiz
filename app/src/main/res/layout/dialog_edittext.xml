@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/dialog_top_bottom_margin"
+    android:layout_marginBottom="@dimen/dialog_top_bottom_margin"
+    android:overScrollMode="ifContentScrolls">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_message"
+        style="?android:attr/textAppearanceSmall"
+        android:layout_marginLeft="@dimen/dialog_title_margin"
+        android:layout_marginRight="@dimen/dialog_title_margin"
+        android:layout_marginStart="@dimen/dialog_title_margin"
+        android:layout_marginEnd="@dimen/dialog_title_margin"
+        android:layout_marginBottom="@dimen/dialog_title_bottom_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?android:attr/textColorSecondary"/>
+
+    <EditText
+        android:id="@+id/editText_value"
+        android:layout_marginStart="@dimen/dialog_edit_text_start_end_margin"
+        android:layout_marginEnd="@dimen/dialog_edit_text_start_end_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"/>
+
+  </LinearLayout>
+</ScrollView>

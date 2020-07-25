@@ -148,6 +148,11 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <nl.dionsegijn.konfetti.KonfettiView
+            android:id="@+id/konfetti"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <ProgressBar
             android:id="@+id/content_loading_progress_bar"
             android:layout_width="wrap_content"

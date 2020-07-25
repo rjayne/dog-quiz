@@ -39,7 +39,7 @@ class SharedPreferenceAccessor(private val sharedPreferences: SharedPreferences)
     }
 
     fun clearValue(key: SharedPreferenceKey) {
-        sharedPreferences.edit().remove(key.keyName)
+        sharedPreferences.edit().remove(key.keyName).commit()
     }
 
     fun editSharedPreferences(key: SharedPreferenceKey, value: Any) {

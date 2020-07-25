@@ -27,6 +27,12 @@ class ScoresFragment: DaggerFragment() {
         viewModel.refreshHighScores()
     }
 
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume")
+        viewModel.refreshHighScores()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

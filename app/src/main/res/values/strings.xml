@@ -5,6 +5,7 @@
     <string name="button_yes">Yes</string>
     <string name="button_no">No</string>
     <string name="button_dismiss">Dismiss</string>
+    <string name="button_ok">OK</string>
 
     <string name="title_game">Game</string>
     <string name="title_leaderboard">Leaderboard</string>
@@ -16,6 +17,8 @@
     <string name="game_terrier_name">Terrier Test</string>
     <string name="game_doggy_name">Doggy Digest</string>
 
+    <string name="high_score_achieved_description">Congratulations!\n\nYou have achieved the highest score for this game.\n\nPlease enter your name for the record.</string>
+    <string name="unknown_player">Anonymous</string>
     <string name="high_score_not_played">---</string>
 
     <string name="setting_category">Settings</string>

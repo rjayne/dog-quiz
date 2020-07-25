@@ -12,4 +12,6 @@
     <dimen name="dialog_top_bottom_margin">48dp</dimen>
     <dimen name="dialog_title_margin">24dp</dimen>
     <dimen name="dialog_title_bottom_margin">48dp</dimen>
+
+    <dimen name="dialog_edit_text_start_end_margin">20dp</dimen>
 </resources>

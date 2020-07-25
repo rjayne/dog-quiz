@@ -14,5 +14,5 @@ data class HighScore(
 @Keep
 @JsonClass(generateAdapter = true)
 data class GameScores(
-    @Json(name = "highScoresMap") val highScoresMap: HashMap<Game, HighScore>
+    @Json(name = "highScoresMap") val highScoresMap: Map<Game, HighScore>
 )

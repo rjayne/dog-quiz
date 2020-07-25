@@ -29,7 +29,10 @@ class SharedPreferenceStorage @Inject constructor(sharedPreferences: SharedPrefe
             highScores.put(game, highScore)
             gameScores = GameScores(highScores)
         } else {
-            gameScores.highScoresMap.put(game, highScore)
+            val highScores = HashMap<Game, HighScore>()
+            highScores.putAll(gameScores.highScoresMap)
+            highScores.put(game, highScore)
+            gameScores = GameScores(highScores)
         }
 
         setGameScores(gameScores)
@@ -38,10 +41,12 @@ class SharedPreferenceStorage @Inject constructor(sharedPreferences: SharedPrefe
     private fun setGameScores(gameScores: GameScores) {
         val gameScoresJson = SimpleMoshiJsonParser.toJson(gameScores, GameScores::class.java)
         sharedPreferenceAccessor.editSharedPreferences(SharedPreferenceKey.GAME_SCORES, gameScoresJson)
+        Timber.d("setGameScores - $gameScoresJson")
     }
 
     fun getGameScores(): GameScores? {
         sharedPreferenceAccessor.getStringFromPreferences(SharedPreferenceKey.GAME_SCORES)?.let {
+            Timber.d("getGameScores - ${SimpleMoshiJsonParser.fromJson(it, GameScores::class.java)}")
             return SimpleMoshiJsonParser.fromJson(it, GameScores::class.java)
         }
 
