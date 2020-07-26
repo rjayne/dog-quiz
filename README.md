@@ -21,4 +21,7 @@ A simple game application to test the user's knowledge of dog breeds.
 
 6. Once 3 bones are lost, the game is over.
 
+
 Try to get the highest score!!
+
+
