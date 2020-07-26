@@ -17,6 +17,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * Integration Test: Run this to capture screenshots of each screen and test the screen flow.
+ */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class ScreenshotCapture {
