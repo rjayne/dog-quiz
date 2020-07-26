@@ -29,6 +29,8 @@ class ScoresViewModel @Inject constructor(private val sharedPreferenceStorage: S
     val doggyHighScore: LiveData<String>
         get() = _doggyHighScore
 
+    private val noScore: String by lazy { resourceProvider.getString(R.string.high_score_not_played) }
+
     fun refreshHighScores() {
         var gameScores = sharedPreferenceStorage.getGameScores()
         if(gameScores == null) {
@@ -45,7 +47,7 @@ class ScoresViewModel @Inject constructor(private val sharedPreferenceStorage: S
         highScore?.let{
             return "${highScore.name}: ${highScore.score}"
         }
-        return resourceProvider.getString(R.string.high_score_not_played)
+        return noScore
     }
 
     private fun getHighScore(gameScores: GameScores, game: Game): HighScore? {

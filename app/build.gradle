@@ -120,6 +120,14 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$testExtVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 
+    // -- Testing
+    testImplementation "junit:junit:$jUnitVersion"
+    testImplementation "androidx.arch.core:core-testing:$testArchCoreVersion"
+    testImplementation "androidx.test:core:$testCoreVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+
 }
 
 // Increase the number of errors that javac will print - use with Dagger

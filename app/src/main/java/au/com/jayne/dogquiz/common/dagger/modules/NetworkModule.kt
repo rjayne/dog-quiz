@@ -4,6 +4,7 @@ import android.content.Context
 import au.com.jayne.dogquiz.BuildConfig
 import au.com.jayne.dogquiz.common.util.ResourceProvider
 import au.com.jayne.dogquiz.domain.repo.DogRepository
+import au.com.jayne.dogquiz.domain.repo.DogRepositoryImpl
 import au.com.jayne.dogquiz.domain.service.DogApiService
 import au.com.jayne.dogquiz.domain.service.SimpleMoshiJsonParser
 import dagger.Module
@@ -56,8 +57,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    internal fun providesTransactionLogRepository(resourceProvider: ResourceProvider, dogApiService: DogApiService): DogRepository {
-        return DogRepository(resourceProvider, dogApiService)
+    internal fun providesDogRepository(resourceProvider: ResourceProvider, dogApiService: DogApiService): DogRepository {
+        return DogRepositoryImpl(resourceProvider, dogApiService)
     }
 
 }

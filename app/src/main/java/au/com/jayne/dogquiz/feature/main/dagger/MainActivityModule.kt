@@ -6,7 +6,6 @@ import au.com.jayne.dogquiz.common.preference.YesNoPreferenceDialogFragment
 import au.com.jayne.dogquiz.feature.game.GameFragment
 import au.com.jayne.dogquiz.feature.game.GameViewModel
 import au.com.jayne.dogquiz.feature.main.MainActivity
-import au.com.jayne.dogquiz.feature.main.MainViewModel
 import au.com.jayne.dogquiz.feature.score.ScoresFragment
 import au.com.jayne.dogquiz.feature.score.ScoresViewModel
 import au.com.jayne.dogquiz.feature.selection.GameSelectionFragment
@@ -36,11 +35,6 @@ abstract class MainActivityModule {
 
     @ContributesAndroidInjector
     abstract fun provideSettingsFragment(): SettingsFragment
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(MainViewModel::class)
-    internal abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
 
     @Binds
     @IntoMap

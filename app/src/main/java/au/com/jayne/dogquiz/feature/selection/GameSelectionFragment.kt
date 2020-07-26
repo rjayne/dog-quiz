@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import au.com.jayne.dogquiz.databinding.GameSelectionFragmentBinding
 import au.com.jayne.dogquiz.domain.model.Game
-import au.com.jayne.dogquiz.feature.main.MainViewModel
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,8 +18,6 @@ class GameSelectionFragment: DaggerFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var binding: GameSelectionFragmentBinding
-
-    private val viewModel: MainViewModel by lazy { ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java) }
 
     private val onGameSelectedListener = object: OnGameSelectedListener {
         override fun play(game: Game) {
