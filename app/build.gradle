@@ -40,6 +40,12 @@ android {
         exclude 'META-INF/metadata.kotlin_module'
         exclude 'META-INF/metadata.jvm.kotlin_module'
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 kapt {
@@ -117,9 +123,6 @@ dependencies {
 
     testImplementation "junit:junit:$jUnitVersion"
 
-    androidTestImplementation "androidx.test.ext:junit:$testExtVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-
     // -- Testing
     testImplementation "junit:junit:$jUnitVersion"
     testImplementation "androidx.arch.core:core-testing:$testArchCoreVersion"
@@ -127,7 +130,34 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
 
+    testImplementation "androidx.test:runner:$testRunnerVersion"
+    testImplementation "androidx.test:rules:$testRulesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion"
+
+    // -- Android tests
+//    androidTestImplementation "androidx.test.ext:junit:$testExtVersion"
+//    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+//
+//    androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+//    androidTestImplementation "androidx.test:rules:$androidxTestVersion"
+
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
+    androidTestImplementation "androidx.test.ext:junit:$testExtVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$testArchCoreVersion"
+    androidTestImplementation "androidx.test:core:$testCoreVersion"
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+    androidTestImplementation "androidx.test:rules:$androidxTestVersion"
+
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion"
+    androidTestImplementation ("androidx.test.espresso:espresso-core:$espressoVersion")
+    androidTestImplementation ("androidx.test.espresso:espresso-contrib:$espressoVersion")
+    androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espressoVersion"
 }
 
 // Increase the number of errors that javac will print - use with Dagger

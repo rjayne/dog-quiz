@@ -43,7 +43,7 @@ class ConnectionStateMonitor @Inject constructor(val applicationContext: Context
         initAccordingToSDKVersion()
     }
 
-    fun initAccordingToSDKVersion() {
+    private fun initAccordingToSDKVersion() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             connectivityManager.registerNetworkCallback(networkRequest, this, Handler(Looper.getMainLooper()))
         } else {

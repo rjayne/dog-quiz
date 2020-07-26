@@ -64,7 +64,7 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
         MessageDetails(QuizMessageCode.UNKNOWN, MessageContainer(R.string.error_unexpected_message, unexpectedErrorMessageTitle))
     }
 
-    private var randomDogListGenerator: RandomDogListGenerator? = null
+    internal var randomDogListGenerator: RandomDogListGenerator? = null
     private val dogsChallenges = ArrayList<DogChallenge>()
 
     private var failureDueToNoInternet = false
@@ -74,6 +74,10 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     internal var failureSoundId: Int? = null
 
     private var highScore: HighScore? = null
+
+    init {
+        imagesToPreload.value = ArrayList()
+    }
 
     fun startNewGame(game: Game) {
         Timber.d("startNewGame - $game")
@@ -87,9 +91,7 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
 
     fun playGame() {
         Timber.d("playGame")
-        viewModelScope.launch(ioDispatcher) {
-            populateDogChallenges()
-        }
+        populateDogChallenges()
     }
 
     fun clearGame() {
@@ -99,7 +101,7 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
         _score.value = 0
         _bonesLeft.value = 3
         _errorMessage.value = null
-        imagesToPreload.value = ArrayList()
+        imagesToPreload.value?.clear()
         dogsChallenges.clear()
     }
 
@@ -244,7 +246,7 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
         } catch (ex: QuizException) {
             Timber.d("QuizException caught - ${ex.messageDetails}")
             viewModelScope.launch(Dispatchers.Main) {
-                if (connectionStateMonitor.hasInternetConnection()) {
+                if (hasInternetConnection()) {
                     displayError(ex.messageDetails)
                 } else {
                     failureDueToNoInternet = true
@@ -257,7 +259,7 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
                 "makeNetworkCall - Unable to find dogs or dog image)"
             )
             viewModelScope.launch(Dispatchers.Main) {
-                if (connectionStateMonitor.hasInternetConnection()) {
+                if (hasInternetConnection()) {
                     displayError(unexpectedErrorMessage)
                 } else {
                     failureDueToNoInternet = true
@@ -267,6 +269,10 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
         }
 
         return null
+    }
+
+    private fun hasInternetConnection(): Boolean {
+        return testInternetHasConnection || connectionStateMonitor.hasInternetConnection()
     }
 
     fun retryIfInternetFailedPreviously() {
@@ -283,7 +289,7 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
     }
 
     fun checkInternetConnection(): Boolean {
-        if(!connectionStateMonitor.hasInternetConnection()) {
+        if(!hasInternetConnection()) {
             val code = if(_dogChallenge.value == null) QuizMessageCode.ALL_DOGS_LOOKUP_FAILURE else QuizMessageCode.NO_INTERNET_CONNECTION
             failureDueToNoInternet = true
             displayNoInternetMessage(code)
@@ -308,8 +314,13 @@ class GameViewModel  @Inject constructor(private val dogRepository: DogRepositor
         return MessageDetails(messageCode, MessageContainer(R.string.error_no_internet_message, R.string.error_no_internet_title))
     }
 
+    //Test helper
+    private var testInternetHasConnection = false
+    internal fun markAsTest() {
+        testInternetHasConnection = true
+    }
+
     companion object {
         val MIN_CHALLENGES_POPULATED = 10
-        val ANONYMOUS = "Anonymous"
     }
 }
